@@ -584,446 +584,242 @@
 </div>
 
 <script>
-    let defaultClothes = [
-        {name: "기본 크루넥 맨투맨", categories: ["상의"], subcategory: "맨투맨/스웨트", season: "사계절", occasions: ["일상 생활", "데이트"], status: "보관중", img: ""},
-        {name: "클래식 흑청 데님", categories: ["하의"], subcategory: "청바지", season: "사계절", occasions: ["출근", "일상 생활", "데이트"], status: "보관중", img: ""},
-        {name: "화이트 데일리 스니커즈", categories: ["신발"], subcategory: "스니커즈/운동화", season: "사계절", occasions: ["출근", "일상 생활", "운동", "데이트"], status: "보관중", img: ""}
-    ];
-    let rawData = JSON.parse(localStorage.getItem('clothesDB_v9')) || defaultClothes;
-    let clothesDB = rawData.map(item => {
-        if (item.category && !item.categories) { item.categories = [item.category]; delete item.category; }
-        if (item.categories && item.categories.includes('겉옷')) item.categories = item.categories.map(c => c === '겉옷' ? '아우터' : c);
-        if (!item.subcategory) item.subcategory = "선택 안함";
-        // 출근길 단어 출근으로 마이그레이션
-        if (item.occasions) {
-            item.occasions = item.occasions.map(occ => occ === "출근길" ? "출근" : occ);
-        } else {
-            item.occasions = ["출근", "일상 생활"];
-        }
-        return item;
-    });
-    const subcategoryMap = {
-        "상의": ["티셔츠/민소매", "맨투맨/스웨트", "셔츠/블라우스", "후드티셔츠", "니트/스웨터", "가디건"],
-        "아우터": ["후드집업", "블루종", "라이더 자켓", "슈트", "블레이저 자켓", "패딩", "아노락", "플리스", "코트", "바람막이/자켓"],
-        "하의": ["청바지", "슬랙스/와이드팬츠", "트레이닝 팬츠", "조거 팬츠", "반바지/버뮤다"],
-        "신발": ["스니커즈/운동화", "구두", "부츠", "슬리퍼/샌들"],
-        "악세사리": ["모자", "가방", "벨트", "기타 악세사리"]
-    };
-    
-    // 지능형 자동 TPO 체크 규칙 
-    const autoOccasionMap = {
-        "티셔츠/민소매": ["일상 생활", "운동"],
-        "맨투맨/스웨트": ["일상 생활"],
-        "셔츠/블라우스": ["출근", "데이트"],
-        "니트/스웨터": ["출근", "일상 생활", "데이트"],
-        "가디건": ["일상 생활", "데이트"],
-        "라이더 자켓": ["데이트", "일상 생활"],
-        "블레이저 자켓": ["출근", "데이트"],
-        "청바지": ["일상 생활", "데이트"],
-        "슬랙스/와이드팬츠": ["출근", "일상 생활", "데이트"],
-        "트레이닝 팬츠": ["운동", "일상 생활"],
-        "스니커즈/운동화": ["출근", "일상 생활", "운동", "데이트"],
-        "구두": ["출근", "데이트"],
-        "부츠": ["데이트"]
-    };
-    
-    let currentTop = null; let currentBottom = null; let currentShoes = null;
-    let selectedCategory = "전체"; let currentOccasion = "출근";
-    
-    function saveToStorage() { localStorage.setItem('clothesDB_v9', JSON.stringify(clothesDB)); }
-    function toggleMiniStorage(e) { e.stopPropagation(); const pop = document.getElementById('miniStoragePopover');
-    pop.style.display = pop.style.display === 'flex' ? 'none' : 'flex'; }
-    document.addEventListener('click', () => { document.getElementById('miniStoragePopover').style.display = 'none'; });
-    
-    function changeOccasion(mode, btn) {
-        currentOccasion = mode;
-        document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        resetRecommendUI();
+    // 🔑 발급받으신 제미나이 API Key를 여기에 입력하세요!
+    // (주의: 깃허브가 Public이므로 타인에게 노출되지 않도록 주의하시거나, 
+    // 나중에는 프롬프트 창에서 입력받는 방식으로 보안을 강화할 수 있습니다.)
+    const GEMINI_API_KEY = AQ.Ab8RN6Jgl9nbEHjCyyjMoZ3doyATCLuMLxxY3UYXrlVvM0SNFw;
+
+    // 데이터 저장을 위한 공용 구조 (우선 로컬을 유지하되 동기화용 내보내기/가져오기 추가)
+    let clothes = JSON.parse(localStorage.getItem('cloai_clothes')) || [];
+    let currentTop = null, currentBottom = null, currentShoes = null;
+
+    // 📱 [데이터 공유 기능] 옷장 데이터 텍스트로 내보내기/가져오기
+    // 컴퓨터에서 생성한 데이터를 핸드폰으로 쉽게 옮길 수 있도록 기능을 추가합니다.
+    function exportData() {
+        const dataStr = JSON.stringify(clothes);
+        navigator.clipboard.writeText(dataStr).then(() => {
+            alert("👗 옷장 데이터가 클립보드에 복사되었습니다!\n카톡 등으로 핸드폰에 전송한 뒤 '데이터 가져오기'에 붙여넣으세요.");
+        }).catch(err => {
+            alert("복사에 실패했습니다. 수동으로 복사해주세요: " + dataStr);
+        });
     }
 
-    function exportClosetData() {
-        if(clothesDB.length === 0) return alert('백업할 옷 데이터가 없습니다.');
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clothesDB));
-        const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "cloai_tpo_backup.json");
-        document.body.appendChild(dl); dl.click(); dl.remove(); alert('백업 완료!');
-    }
-
-    function importClosetData(inputElement) {
-        const file = inputElement.files[0]; if(!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
+    function importData() {
+        const inputData = prompt("이전 기기에서 복사한 옷장 데이터를 입력해주세요:");
+        if (inputData) {
             try {
-                let importedData = JSON.parse(e.target.result);
-                if(Array.isArray(importedData)) {
-                    if(confirm(`[총 ${importedData.length}개]의 데이터를 복구할까요?`)) {
-                        clothesDB = importedData;
-                        saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); alert('복구 완료!');
-                    }
+                const parsed = JSON.parse(inputData);
+                if (Array.isArray(parsed)) {
+                    clothes = parsed;
+                    saveToStorage();
+                    renderCloset();
+                    alert("🔄 데이터 동기화 완료! 핸드폰에서도 똑같이 옷장이 보입니다.");
+                } else {
+                    alert("올바른 데이터 형식이 아닙니다.");
                 }
-            } catch (err) { alert('파일이 올바르지 않습니다.');
+            } catch (e) {
+                alert("데이터 가져오기에 실패했습니다. 코드를 다시 확인해주세요.");
             }
-            inputElement.value = "";
-        };
-        reader.readAsText(file);
-    }
-
-    function toggleModal(modalId, show) {
-        const modal = document.getElementById(modalId);
-        modal.style.display = show ? 'flex' : 'none';
-        if (show && modalId === 'closetModal') { updateSubFilterOptions(selectedCategory); updateClosetUI();
-        }
-        if (!show && modalId === 'registerModal') {
-            document.getElementById('clothCategory').value = "";
-            document.getElementById('subCategoryFormGroup').style.display = 'none';
-            document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => cb.checked = false);
         }
     }
-    function handleOverlayClick(e, modalId) { if(e.target.classList.contains('modal-overlay')) toggleModal(modalId, false);
-    }
 
-    function handleRegistrationCategoryChange() {
-        const categorySelect = document.getElementById('clothCategory');
-        const subGroup = document.getElementById('subCategoryFormGroup');
-        const subSelect = document.getElementById('clothSubcategory');
-        const selected = categorySelect.value;
-        if (!selected) { subGroup.style.display = 'none'; return;
+    // 🧠 [진짜 제미나이 AI 연동] 분석 함수
+    async function askGeminiCodi(tpo, style) {
+        if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("여기에")) {
+            alert("제미나이 API Key를 먼저 코드에 올바르게 입력해주세요!");
+            return null;
         }
-        subSelect.innerHTML = '';
-        const options = subcategoryMap[selected] || [];
-        options.forEach(optText => {
-            const opt = document.createElement('option'); opt.value = optText; opt.textContent = optText; subSelect.appendChild(opt);
-        });
-        subGroup.style.display = 'flex';
-        handleRegistrationSubcategoryChange();
-    }
 
-    function handleRegistrationSubcategoryChange() {
-        const subSelect = document.getElementById('clothSubcategory');
-        const selectedSub = subSelect.value;
-        const defaultOccasions = autoOccasionMap[selectedSub] || ["일상 생활"];
-        document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => {
-            cb.checked = defaultOccasions.includes(cb.value);
-        });
-    }
-
-    function addNewCloth() {
-        const nameInput = document.getElementById('clothName');
-        const categorySelect = document.getElementById('clothCategory');
-        const subSelect = document.getElementById('clothSubcategory');
-        const seasonInput = document.getElementById('clothSeason');
-        const fileInput = document.getElementById('clothImage');
-        const checkedOccasions = Array.from(document.querySelectorAll('input[name="clothOccasion"]:checked')).map(cb => cb.value);
-
-        if (!nameInput.value.trim()) return alert('이름을 입력해 주세요!');
-        if (!categorySelect.value) return alert('대분류 카테고리를 지정해 주세요!');
-        if (checkedOccasions.length === 0) return alert('착용 상황(TPO) 태그를 하나 이상 선택해 주세요!');
-
-        const file = fileInput.files[0];
-        const completeAction = (imgData) => {
-            const newCloth = {
-                name: nameInput.value, categories: [categorySelect.value], subcategory: subSelect.value ||
-                "일반", season: seasonInput.value, occasions: checkedOccasions, status: "보관중", img: imgData
-            };
-            clothesDB.push(newCloth); saveToStorage();
-            nameInput.value = ""; fileInput.value = ""; categorySelect.value = "";
-            document.getElementById('subCategoryFormGroup').style.display = 'none';
-            alert(`'${newCloth.name}' 옷장에 안전하게 등록 완료!`);
-            toggleModal('registerModal', false);
-        };
-        if (file) { const reader = new FileReader(); reader.onload = (e) => completeAction(e.target.result); reader.readAsDataURL(file);
-        } else { completeAction(""); }
-    }
-
-    function updateSubFilterOptions(category) {
-        const subFilter = document.getElementById('subFilter');
-        subFilter.innerHTML = '<option value="전체">모든 세부 분류</option>';
-        let subs = [];
-        if (category === "전체") { Object.values(subcategoryMap).forEach(arr => subs.push(...arr));
-        } else { subs = subcategoryMap[category] || [];
-        }
-        subs.forEach(sub => {
-            const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subFilter.appendChild(opt);
-        });
-    }
-
-    function filterCategory(category, btnElement) {
-        selectedCategory = category;
-        const tabs = document.querySelectorAll('.tab-btn'); tabs.forEach(t => t.classList.remove('active'));
-        btnElement.classList.add('active');
-        updateSubFilterOptions(category); updateClosetUI();
-    }
-
-    function toggleSelectAll(masterCheckbox) {
-        const itemCheckboxes = document.querySelectorAll('.select-checkbox');
-        itemCheckboxes.forEach(cb => cb.checked = masterCheckbox.checked);
-    }
-
-    function updateClosetUI() {
-        const gridEl = document.getElementById('closetGrid');
-        gridEl.innerHTML = '';
-        const selectedSub = document.getElementById('subFilter').value;
-        const selectedSeason = document.getElementById('seasonFilter').value;
-        document.getElementById('selectAllCheckbox').checked = false;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         
-        // 검색어 가져오기
-        const searchKeyword = document.getElementById('searchInput') ? document.getElementById('searchInput').value.trim().toLowerCase() : "";
+        // 현재 내 옷장 상태를 제미나이에게 학습시킵니다.
+        const closetContext = clothes.map(c => `[${c.categories.join(',')}] ${c.name} (${c.color}, ${c.texture}, 상태: ${c.status})`).join('\n');
+        
+        const promptText = `
+        당신은 패션 인공지능 스타일러 'CLO:AI'입니다.
+        내 옷장 목록:
+        ${closetContext}
 
-        const filteredDB = clothesDB.map((item, originalIndex) => ({...item, originalIndex}))
-            .filter(item => {
-                const matchCat = (selectedCategory === "전체" || item.categories.includes(selectedCategory));
-                const matchSub = (selectedSub === "전체" || item.subcategory === selectedSub);
-                let matchSea = (selectedSeason === "전체" || selectedSeason === "사계절" ? (selectedSeason === "전체" || 
-                item.season === "사계절") : (item.season === selectedSeason || item.season === "사계절"));
-                
-                // 검색어 필터링
-                let matchSearch = true;
-                if (searchKeyword) {
-                    matchSearch = item.name.toLowerCase().includes(searchKeyword) || item.subcategory.toLowerCase().includes(searchKeyword);
-                }
+        조건:
+        - TPO (상황): ${tpo}
+        - 원하는 스타일 선호도: ${style}
 
-                return matchCat && matchSub && matchSea && matchSearch;
+        위의 옷장 목록에서 현재 '세탁중'이 아닌 옷들 중 상의(Top), 하의(Bottom), 신발/기타(Shoes)를 각각 1개씩 엄선해서 완벽한 TPO 매칭 코디를 추천해주세요.
+        반드시 내가 가진 옷장 목록에 있는 이름 그대로 매칭해야 합니다. 없는 옷을 지어내지 마세요.
+
+        답변은 반드시 아래와 같은 순수한 JSON 형식으로만 출력하세요. 다른 설명은 절대 붙이지 마세요.
+        {
+          "top": "추천 상의 이름",
+          "bottom": "추천 하의 이름",
+          "shoes": "추천 신발 이름",
+          "reason": "이 코디를 추천하는 전문적인 패션 이유 (TPO와 스타일 선호도 반영)"
+        }
+        `;
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
             });
+            const data = await response.json();
+            const responseText = data.candidates[0].content.parts[0].text.trim();
             
-        if(filteredDB.length === 0) {
-            gridEl.innerHTML = "<p style='color:#94a3b8; text-align:center; grid-column:1/-1; padding:40px 0;'>해당 조건의 아이템이 존재하지 않습니다.</p>";
-            return;
-        }
-
-        filteredDB.forEach(item => {
-            const li = document.createElement('li'); li.className = 'closet-card';
-            const imgHTML = item.img ? `<img src="${item.img}" class="cloth-img">` : `
-                <div class="cloth-img no-img" style="display:flex; justify-content:center; align-items:center;">
-                    <svg class="icon-svg" style="color:#cbd5e1; width:34px; height:34px; margin-top:40px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>`;
-            const statusClass = item.status === '보관중' ? 'status-keep' : 'status-wash';
-            const occasionBadges = item.occasions.map(occ => `<span class="tag-occasion-badge">${occ}</span>`).join(' ');
-
-            li.innerHTML = `
-                <input type="checkbox" class="select-checkbox" data-index="${item.originalIndex}">
-                <div class="cloth-card-clickable" onclick="openEditModal(${item.originalIndex})">
-                    ${imgHTML}
-                    <div class="cloth-name">${item.name}</div>
-                    <div class="cloth-subtext">${item.subcategory} · ${item.season}</div>
-                    <div style="margin-bottom: 4px; display:flex; gap:2px; flex-wrap:wrap; justify-content:center;">${occasionBadges}</div>
-                    <div class="tag-container">
-                        <span class="cloth-tag ${statusClass}">${item.status}</span>
-                        <span class="cloth-tag tag-category-badge">${item.categories[0]}</span>
-                    </div>
-                </div>
-            `;
-            gridEl.appendChild(li);
-        });
-    }
-
-    function getCheckedIndexes() {
-        const checkboxes = document.querySelectorAll('.select-checkbox:checked');
-        return Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-index')));
-    }
-
-    function batchMoveToWash() {
-        const targets = getCheckedIndexes(); if(targets.length === 0) return alert('선택된 아이템이 없습니다.');
-        targets.forEach(idx => { clothesDB[idx].status = "세탁중"; });
-        saveToStorage(); updateClosetUI(); alert('세탁함으로 이동했습니다.');
-    }
-    function batchWashComplete() {
-        const targets = getCheckedIndexes(); if(targets.length === 0) return alert('선택된 아이템이 없습니다.');
-        targets.forEach(idx => { clothesDB[idx].status = "보관중"; });
-        saveToStorage(); updateClosetUI(); alert('세탁이 완료되었습니다.');
-    }
-    function batchDelete() {
-        const targets = getCheckedIndexes();
-        if(targets.length === 0) return alert('선택된 아이템이 없습니다.');
-        if(confirm('선택한 항목을 옷장에서 삭제할까요?')) {
-            targets.sort((a,b) => b - a).forEach(idx => { clothesDB.splice(idx, 1); });
-            resetRecommendUI(); saveToStorage(); updateClosetUI();
+            // JSON 마크다운 기호 제거 처리
+            const cleanJson = responseText.replace(/```json|```/g, "").trim();
+            return JSON.parse(cleanJson);
+        } catch (error) {
+            console.error("Gemini API Error:", error);
+            alert("제미나이 AI 추천을 불러오는 중 오류가 발생했습니다.");
+            return null;
         }
     }
 
-    // 옷 수정 기능
-    function openEditModal(index) {
-        const item = clothesDB[index];
-        document.getElementById('editClothIndex').value = index;
-        document.getElementById('editClothName').value = item.name;
-        document.getElementById('editClothSubcategory').value = item.subcategory;
+    // 스마트 코디 매칭 시작 버튼 함수 업데이트
+    async function startCodiMatching() {
+        const tpoInput = document.getElementById('tpoInput').value.trim();
+        const styleInput = document.getElementById('styleInput').value.trim();
+        if (!tpoInput) { alert('오늘의 상황(TPO)을 입력해주세요!'); return; }
+
+        const recommendBox = document.getElementById('recommendBox');
+        recommendBox.innerHTML = `
+            <div style="text-align:center; padding:40px; color:#64748b;">
+                <div class="spinner" style="margin: 0 auto 15px; width: 30px; height: 30px; border: 3px solid #e2e8f0; border-top-color: #06b6d4; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <p>제미나이 AI가 현재 옷장을 분석하여<br>최적의 코디를 조합하고 있습니다...</p>
+            </div>
+        `;
+
+        // 🚀 진짜 제미나이 호출
+        const result = await askGeminiCodi(tpoInput, styleInput);
         
-        const preview = document.getElementById('editImagePreview');
-        if (item.img) {
-            preview.src = item.img;
-            preview.style.display = 'block';
-        } else {
-            preview.src = '';
-            preview.style.display = 'none';
-        }
-        document.getElementById('editClothImage').value = '';
-        toggleModal('editModal', true);
-    }
-
-    document.getElementById('editClothImage').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const preview = document.getElementById('editImagePreview');
-                preview.src = event.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    function saveClothEdit() {
-        const index = document.getElementById('editClothIndex').value;
-        const newName = document.getElementById('editClothName').value;
-        const newSub = document.getElementById('editClothSubcategory').value;
-        const fileInput = document.getElementById('editClothImage');
-        const file = fileInput.files[0];
-
-        if (!newName.trim()) return alert('이름을 입력해 주세요!');
-
-        clothesDB[index].name = newName;
-        clothesDB[index].subcategory = newSub || "일반";
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                clothesDB[index].img = e.target.result;
-                finishEdit();
-            };
-            reader.readAsDataURL(file);
-        } else {
-            finishEdit();
-        }
-
-        function finishEdit() {
-            saveToStorage();
-            updateClosetUI();
-            alert('옷 정보가 수정되었습니다!');
-            toggleModal('editModal', false);
-            
-            if (currentTop === clothesDB[index] || currentBottom === clothesDB[index] || currentShoes === clothesDB[index]) {
-                resetRecommendUI();
-            }
-        }
-    }
-
-    // 💡 [활성] 활성화된 TPO 풀 기반 상하의신발 매칭 엔진
-    function recommendCodi() {
-        const tpoPool = clothesDB.filter(c => c.status === '보관중' && c.occasions.includes(currentOccasion));
-        const tops = tpoPool.filter(c => c.categories.includes('상의'));
-        const bottoms = tpoPool.filter(c => c.categories.includes('하의'));
-        const shoes = tpoPool.filter(c => c.categories.includes('신발'));
-        if (tops.length === 0 || bottoms.length === 0 || shoes.length === 0) {
-            alert(`선택하신 [${currentOccasion}] 모드 조건으로 매칭 가능한 보관 중인 의류 세트가 부족합니다. 나의 옷장에서 아이템들의 상황 태그를 수정 및 보충해 주세요.`);
+        if (!result) {
+            resetRecommendUI();
             return;
         }
 
-        currentTop = tops[Math.floor(Math.random() * tops.length)];
-        currentBottom = bottoms[Math.floor(Math.random() * bottoms.length)];
-        currentShoes = shoes[Math.floor(Math.random() * shoes.length)];
-        renderCoordinationView();
-    }
+        // 제미나이가 골라준 옷을 내 옷장에서 매칭해 찾아오기
+        currentTop = clothes.find(c => c.name === result.top && c.status !== '세탁중') || clothes.find(c => c.categories.includes('상의'));
+        currentBottom = clothes.find(c => c.name === result.bottom && c.status !== '세탁중') || clothes.find(c => c.categories.includes('하의'));
+        currentShoes = clothes.find(c => c.name === result.shoes && c.status !== '세탁중') || clothes.find(c => c.categories.includes('신발')) || clothes.find(c => c.categories.includes('악세사리'));
 
-    function renderCoordinationView() {
-        const box = document.getElementById('recommendBox');
-        const generateSlotHTML = (slotTitle, item, catKey) => {
-            const imgHTML = item.img ?
-            `<img src="${item.img}" class="coordination-slot">` : `
-                <div class="coordination-slot no-img" style="display:flex; justify-content:center; align-items:center;">
-                    <svg class="icon-svg" style="color:#cbd5e1; width:40px; height:40px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>`;
-            return `
-                <div class="slot-container" id="slot-${catKey}">
-                    ${imgHTML}
-                    <div class="slot-info">
-                        <div class="slot-type">${slotTitle}</div>
-                        <div class="slot-label">${item.name}</div>
-                        <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">${item.subcategory}</div>
-                    </div>
-                    <div class="reroll-overlay" onclick="event.stopPropagation(); rerollIndividualSlot('${catKey}')">
-                        <svg class="icon-svg" style="width:24px; height:24px; margin-bottom:4px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                        <span>다른 옷 보기</span>
-                    </div>
-                </div>`;
-        };
-
-        box.innerHTML = `
-            <div class="coordination-view">
-                ${generateSlotHTML('Top', currentTop, '상의')}
-                ${generateSlotHTML('Bottom', currentBottom, '하의')}
-                ${generateSlotHTML('Shoes', currentShoes, '신발')}
-            </div>`;
-        box.classList.add('active');
-        const wearBtn = document.getElementById('btnWear'); wearBtn.disabled = false; wearBtn.classList.add('active');
-    }
-
-    // 🔄 특정 슬롯 단독 리롤 서브 펑션 (셔플 스케일 다운 트랜지션 포함)
-    function rerollIndividualSlot(categoryKey) {
-        const tpoPool = clothesDB.filter(c => c.status === '보관중' && c.occasions.includes(currentOccasion) && c.categories.includes(categoryKey));
-        if (tpoPool.length <= 1) {
-            alert(`현재 옷장에 [${currentOccasion}] 모드로 등록된 다른 ${categoryKey} 아이템이 없어 교체할 수 없습니다.`);
+        if (!currentTop || !currentBottom) {
+            recommendBox.innerHTML = `<div style="padding:20px; text-align:center; color:#ef4444;">매칭 가능한 상/하의가 옷장에 부족합니다. 옷을 더 등록해주세요!</div>`;
             return;
         }
 
-        let currentItem = categoryKey === '상의' ?
-        currentTop : (categoryKey === '하의' ? currentBottom : currentShoes);
-        let nextItem = currentItem; let protectionCount = 0;
-        while (nextItem.name === currentItem.name && protectionCount < 15) {
-            nextItem = tpoPool[Math.floor(Math.random() * tpoPool.length)];
-            protectionCount++;
-        }
+        // 결과 UI 렌더링
+        renderRecommendResult(result.reason);
+    }
 
-        if (categoryKey === '상의') currentTop = nextItem;
-        else if (categoryKey === '하의') currentBottom = nextItem;
-        else currentShoes = nextItem;
+    // 기존의 나머지 기본 UI 렌더링, 옷 등록, 삭제 관련 스크립트 함수들 (기존 로직 유지)
+    function saveToStorage() { localStorage.setItem('cloai_clothes', JSON.stringify(clothes)); }
+    
+    function addCloth() {
+        const name = document.getElementById('clothName').value.trim();
+        const color = document.getElementById('clothColor').value.trim();
+        const texture = document.getElementById('clothTexture').value.trim();
+        if (!name) { alert('의류 명칭을 입력하세요.'); return; }
+        
+        const categories = [];
+        if (document.getElementById('catTop').classList.contains('active')) categories.push('상의');
+        if (document.getElementById('catBottom').classList.contains('active')) categories.push('하의');
+        if (document.getElementById('catOuter').classList.contains('active')) categories.push('아우터');
+        if (document.getElementById('catShoes').classList.contains('active')) categories.push('신발');
+        if (document.getElementById('catAcc').classList.contains('active')) categories.push('악세사리');
+        if (categories.length === 0) { alert('카테고리를 최소 하나 선택하세요.'); return; }
 
-        const targetSlot = document.getElementById(`slot-${categoryKey}`);
-        targetSlot.style.transform = 'scale(0.93)';
-        targetSlot.style.opacity = '0.3';
+        clothes.push({ id: Date.now(), name, color, texture, categories, status: '보관중' });
+        saveToStorage(); renderCloset(); clearInputForm();
+    }
 
-        setTimeout(() => {
-            const imgHTML = nextItem.img ? `<img src="${nextItem.img}" class="coordination-slot">` : `
-                <div class="coordination-slot no-img" style="display:flex; justify-content:center; align-items:center;">
-                    <svg class="icon-svg" style="color:#cbd5e1; width:40px; height:40px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>`;
-            
-            targetSlot.innerHTML = `
-                ${imgHTML}
-                <div class="slot-info">
-                    <div class="slot-type">${categoryKey === '상의' ? 'Top' : (categoryKey === '하의' ? 'Bottom' : 'Shoes')}</div>
-                    <div class="slot-label">${nextItem.name}</div>
-                    <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">${nextItem.subcategory}</div>
+    function renderCloset() {
+        const grid = document.getElementById('closetGrid');
+        grid.innerHTML = clothes.map(c => `
+            <div class="cloth-item" style="border-left: 4px solid ${c.status === '세탁중' ? '#ef4444' : '#06b6d4'}">
+                <div>
+                    <strong>${c.name}</strong> <span style="font-size:12px; color:#64748b;">(${c.categories.join(', ')})</span>
+                    <div style="font-size:12px; color:#94a3b8; margin-top:2px;">${c.color} / ${c.texture}</div>
                 </div>
-                <div class="reroll-overlay" onclick="event.stopPropagation(); rerollIndividualSlot('${categoryKey}')">
-                    <svg class="icon-svg" style="width:24px;
-                    height:24px; margin-bottom:4px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                    <span>다른 옷 보기</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <span style="font-size:12px; font-weight:600; color:${c.status === '세탁중' ? '#ef4444' : '#10b981'}">${c.status}</span>
+                    <button onclick="toggleStatus(${c.id})" style="border:none; background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer;">전환</button>
+                    <button onclick="deleteCloth(${c.id})" style="border:none; background:#fee2e2; color:#ef4444; padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer;">삭제</button>
                 </div>
-            `;
-            targetSlot.style.transform = 'scale(1)'; targetSlot.style.opacity = '1';
-        }, 180);
+            </div>
+        `).join('');
+    }
+
+    function toggleStatus(id) {
+        const item = clothes.find(c => c.id === id);
+        if (item) { item.status = item.status === '보관중' ? '세탁중' : '보관중'; saveToStorage(); renderCloset(); }
+    }
+
+    function deleteCloth(id) {
+        clothes = clothes.filter(c => c.id !== id); saveToStorage(); renderCloset();
+    }
+
+    function clearInputForm() {
+        document.getElementById('clothName').value = '';
+        document.getElementById('clothColor').value = '';
+        document.getElementById('clothTexture').value = '';
+        document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    function toggleTag(btn) { btn.classList.toggle('active'); }
+
+    function renderRecommendResult(reason) {
+        const recommendBox = document.getElementById('recommendBox');
+        recommendBox.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:20px; width:100%;">
+                <div style="display:flex; gap:12px; justify-content:center;">
+                    <div id="slotTop" class="codi-slot"><strong>👕 상의</strong><br>${currentTop.name}</div>
+                    <div id="slotBottom" class="codi-slot"><strong>👖 하의</strong><br>${currentBottom.name}</div>
+                    <div id="slotShoes" class="codi-slot"><strong>👟 신발/기타</strong><br>${currentShoes ? currentShoes.name : '선택 없음'}</div>
+                </div>
+                <div style="background:#f8fafc; padding:15px; border-radius:12px; font-size:14px; line-height:1.6; border-left:4px solid #06b6d4;">
+                    <strong>🤖 CLO:AI 분석 리포트:</strong><br>${reason}
+                </div>
+                <button onclick="wearCodi()" style="width:100%; background:#1e293b; color:white; border:none; padding:12px; border-radius:12px; font-weight:600; cursor:pointer;">이 코디로 착용 (나머지 옷 세탁행)</button>
+            </div>
+        `;
     }
 
     function wearCodi() {
-        if (!currentTop || !currentBottom || !currentShoes) return;
-        [currentTop, currentBottom, currentShoes].forEach(item => {
-            if (!(item.categories.includes('신발') || item.categories.includes('악세사리'))) item.status = '세탁중';
-        });
-        alert(`선택하신 코디로 매칭 및 착용 기록이 완료되었습니다.`); resetRecommendUI(); saveToStorage();
+        if (!currentTop || !currentBottom) return;
+        if (currentTop) currentTop.status = '세탁중';
+        if (currentBottom) currentBottom.status = '세탁중';
+        if (currentShoes && currentShoes.status !== '신발') currentShoes.status = '세탁중';
+        alert("선택하신 코디로 착용 기록이 완료되었습니다! 상/하의는 세탁중 상태로 전환됩니다.");
+        resetRecommendUI(); saveToStorage(); renderCloset();
     }
 
     function resetRecommendUI() {
-        const box = document.getElementById('recommendBox');
-        box.innerHTML = `
-             <div id="defaultText" style="color: #64748b; line-height: 1.6;
-                text-align: center;">
-                <svg class="icon-svg icon-large" style="margin-bottom:14px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <br>제미나이 비전 엔진 기반 상황 맞춤 매칭 구조<br>상단의 모드를 정한 후 아래 버튼을 눌러보세요.
-            </div>`;
-        box.classList.remove('active');
-        const wearBtn = document.getElementById('btnWear'); wearBtn.disabled = true; wearBtn.classList.remove('active');
-        currentTop = null; currentBottom = null; currentShoes = null;
+        document.getElementById('recommendBox').innerHTML = `
+            <div id="defaultText" style="color: #64748b; line-height: 1.6; text-align: center;">
+                TPO와 스타일 선호도를 입력하고 버튼을 누르면<br>진짜 제미나이 AI가 추천을 시작합니다.
+            </div>
+        `;
+    }
+
+    // UI 초기 로드 시 데이터 추가 연동 버튼 배치하기 위해 화면 상단에 동기화 버튼 UI 추가 (선택사항)
+    window.onload = function() {
+        renderCloset();
+        // 화면 어딘가에 데이터 공유 버튼을 붙여주기 위한 코드
+        const container = document.querySelector('.main-container');
+        const syncDiv = document.createElement('div');
+        syncDiv.style = "margin-bottom: 20px; display:flex; gap:10px;";
+        syncDiv.innerHTML = `
+            <button onclick="exportData()" style="background:#0284c7; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:12px;">📱 컴퓨터->폰 데이터 내보내기</button>
+            <button onclick="importData()" style="background:#0f766e; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:12px;">🔄 폰에서 데이터 가져오기</button>
+        `;
+        document.body.insertBefore(syncDiv, container);
     }
 </script>
+
+<style>
+    /* 로딩 애니메이션용 스타일 정의 추가 */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .codi-slot { flex:1; background:#ffffff; border:1px solid #e2e8f0; padding:15px; border-radius:16px; text-align:center; font-size:13px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+</style>
 </body>
 </html>

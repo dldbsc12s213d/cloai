@@ -956,9 +956,15 @@ const data = await response.json();
             const cleanJson = responseText.replace(/```json|```/g, "").trim();
             return JSON.parse(cleanJson);
 } catch (error) {
-            console.error("Gemini Engine Error:", error);
-alert("제미나이 AI 추천을 매칭하는 엔진 통신 중 에러가 발생했습니다.");
-            return null;
+    console.error("Gemini Engine Error:", error);
+    
+    // 에러 메시지를 조금 더 상세하게 가공하여 팝업으로 안내
+    let errorMsg = "엔진 통신 중 에러가 발생했습니다.\n\n[원인 파악 요령]\n";
+    errorMsg += `- 에러 내용: ${error.message}\n`;
+    errorMsg += "- 브라우저 화면에서 F12 키를 눌러 'Console' 탭을 보시면 더 자세한 로그를 볼 수 있습니다.";
+    
+    alert(errorMsg);
+    return null;
 }
     }
 

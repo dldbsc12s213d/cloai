@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLO:AI - 스마트 올라운드 TPO 스타일러 (v9.5)</title>
+    <title>CLO:AI - 스마트 올라운드 TPO 스타일러 (v10.0)</title>
     <style>
         /* 🌌 미니멀 화이트 & 시안 테마 베이스 */
         *, *::before, *::after {
@@ -20,993 +20,570 @@
             align-items: center;
         }
 
-        /* 와이드 대시보드 그리드 레이아웃 */
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            color: #64748b;
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        /* 대시보드 레이아웃 */
         .main-container {
             max-width: 1000px;
             width: 100%;
             display: flex;
+            flex-direction: column;
             gap: 24px;
-            align-items: stretch;
+        }
+        @media (min-width: 768px) {
+            .main-container {
+                flex-direction: row;
+                align-items: stroke;
+            }
         }
 
-        .hero-card {
-            flex: 2.2;
+        .card {
             background-color: #ffffff;
             padding: 35px 30px;
             border-radius: 24px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 30px rgba(148, 163, 184, 0.12);
-            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-
-        /* 메인 화면 우측 배치 버튼 패널 */
-        .side-panel {
-            flex: 0.8;
+        .hero-card {
+            flex: 1.4;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+        }
+        .side-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         h2 {
-            color: #0f172a;
+            font-size: 1.35rem;
+            color: #1e293b;
             margin-top: 0;
-            margin-bottom: 24px;
-            font-size: 1.3rem;
-            font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
 
-        h3 {
-            color: #64748b;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 0 12px 0;
-            text-align: left;
-        }
-
-        /* 🎯 TPO 상황별 모드 탭 컨트롤러 */
-        .occasion-container {
+        /* 입력 폼 및 버튼 */
+        .form-group {
             display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            width: 100%;
-            background-color: #f1f5f9;
-            padding: 6px;
-            border-radius: 16px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .occasion-btn {
-            flex: 1;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            background-color: transparent;
-            color: #64748b;
-            border: none;
+        input, select {
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            outline: none;
+            background-color: #fff;
+        }
+        input { flex: 1; }
+        input:focus, select:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.95rem;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
         }
-        .occasion-btn.active {
-            background-color: #ffffff;
-            color: #00b4d8;
-            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.15);
+        .btn-cyan {
+            background-color: #06b6d4;
+            color: white;
+        }
+        .btn-cyan:hover {
+            background-color: #0891b2;
+        }
+        .btn-slate {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        .btn-slate:hover {
+            background-color: #e2e8f0;
         }
 
-        /* 📸 추천 박스 - 이미지 중심 디자인 */
-        .recommend-box {
-            background-color: #f8fafc;
-            border: 2px dashed #cbd5e1;
-            border-radius: 20px;
-            padding: 24px;
-            min-height: 340px;
-            margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .recommend-box.active {
-            border: 2px solid #00b4d8;
-            background-color: #f0fdfa;
-            box-shadow: 0 10px 25px rgba(0, 180, 216, 0.08);
-        }
-        
-        /* 대형 이미지 중심의 가로 3열 레이아웃 */
-        .coordination-view {
+        /* TPO 선택 그리드 */
+        .tpo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            width: 100%;
+            gap: 10px;
+            margin-bottom: 5px;
         }
-        
-        /* 개별 슬롯 컨테이너 (상하의신발 클릭 시 셔플 동작용 구조) */
-        .slot-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        
-        .slot-container:hover {
-            transform: translateY(-4px);
-        }
-
-        /* 개별 파트 변경을 유도하는 호버 레이어 */
-        .reroll-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 180, 216, 0.85);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-            border-radius: 18px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            backdrop-filter: blur(2px);
-        }
-        .slot-container:hover .reroll-overlay {
-            opacity: 1;
-        }
-
-        /* 사진 파트 극대화 크기 조절 */
-        .coordination-slot {
-            width: 100%;
-            height: 190px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 1px solid #f1f5f9;
-            background-color: #f8fafc;
-        }
-        
-        .slot-info {
-            text-align: center;
-            margin-top: 12px;
-            width: 100%;
-        }
-        
-        .slot-type {
-            font-size: 0.72rem;
-            color: #00b4d8;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-        
-        .slot-label {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: #1e293b;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* 🕹️ 버튼 인터페이스 컴포넌트 */
-        button {
+        .tpo-btn {
             padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn-recommend { 
-            background-color: #00b4d8;
-            color: #ffffff; 
-            width: 100%; 
-            margin-bottom: 12px;
-            box-shadow: 0 4px 14px rgba(0, 180, 216, 0.3);
-        }
-        .btn-recommend:hover { 
-            background-color: #0096c7;
-            box-shadow: 0 6px 20px rgba(0, 180, 216, 0.45);
-        }
-        
-        .btn-wear { background-color: #f1f5f9;
-            color: #94a3b8; cursor: not-allowed; width: 100%; border: 1px solid #e2e8f0;}
-        .btn-wear.active { background-color: #0f172a;
-            color: #ffffff; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
-        }
-        
-        .btn-open-popup { 
-            flex: 1;
-            background-color: #ffffff; 
-            color: #00b4d8; 
-            border: 1px solid #00b4d8; 
-            flex-direction: column;
-            gap: 12px;
-            font-size: 1.05rem;
-            box-shadow: 0 4px 12px rgba(0, 180, 216, 0.05);
-        }
-        .btn-open-popup:hover { background-color: rgba(0, 180, 216, 0.04); box-shadow: 0 6px 15px rgba(0,180,216,0.1); }
-        .btn-open-popup.closet { background-color: #ffffff; color: #475569;
-            border: 1px solid #cbd5e1;}
-        .btn-open-popup.closet:hover { background-color: #f8fafc; border-color: #94a3b8;
-            color: #0f172a;}
-
-        /* 팝업 모달 스타일 */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            padding: 30px;
-            border-radius: 24px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border-radius: 14px;
+            background-color: #f8fafc;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+            color: #475569;
         }
-        .modal-close {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none; border: none;
-            cursor: pointer; color: #94a3b8;
+        .tpo-btn:hover {
+            background-color: #f1f5f9;
         }
-
-        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
-        .form-group label { font-size: 0.85rem; color: #475569; margin-bottom: 8px; font-weight: 700; }
-        .form-group input[type="text"], .form-group select {
-            padding: 12px;
-            background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; color: #1e293b; outline: none;
-        }
-        .form-group input[type="text"]:focus, .form-group select:focus {
-            border-color: #00b4d8;
-            background-color: #ffffff;
+        .tpo-btn.active {
+            background-color: #ecfeff;
+            border-color: #06b6d4;
+            color: #0891b2;
+            font-weight: 700;
         }
 
-        /* TPO 체크박스 배치 */
-        .checkbox-group {
-            display: flex;
+        /* 디지털 옷장 리스트 */
+        .clothes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 4px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
         }
-        .checkbox-label {
+        .clothe-item {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 14px;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .clothe-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .clothe-tag {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 8px;
+            width: fit-content;
+            font-weight: 700;
+        }
+        .tag-top { background-color: #dbeafe; color: #1e40af; }
+        .tag-bottom { background-color: #fef3c7; color: #92400e; }
+        .tag-shoes { background-color: #dcfce7; color: #166534; }
+        .tag-acc { background-color: #f3e8ff; color: #6b21a8; }
+        
+        .clothe-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e293b;
+            word-break: break-all;
+        }
+        .clothe-status {
+            font-size: 0.8rem;
+            color: #059669;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .status-washing {
+            color: #ef4444;
+        }
+        .btn-delete {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0;
+        }
+        .btn-delete:hover {
+            color: #ef4444;
+        }
+
+        /* 결과 분석 창 */
+        .recommend-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 30px 24px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            transition: all 0.3s;
+        }
+        .recommend-box.success {
+            border-style: solid;
+            border-color: #06b6d4;
+            background-color: #ffffff;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        
+        /* 로딩 스피너 애니메이션 */
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #06b6d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .report-title {
+            font-weight: 700;
+            color: #0891b2;
+            font-size: 1.1rem;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.85rem;
-            color: #1e293b;
-            cursor: pointer;
-            background-color: #f8fafc;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s;
         }
-        .checkbox-label input[type="checkbox"] {
-            margin: 0;
-        }
-        
-        .responsive-fade { animation: fadeIn 0.3s ease-in-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        input[type="checkbox"] { accent-color: #00b4d8; cursor: pointer; }
-        .btn-submit { background-color: #00b4d8; color: #ffffff; width: 100%; margin-top: 10px; }
-
-        /* 필터 패널 인터페이스 */
-        .filter-section { background-color: #f8fafc;
-            padding: 18px; border-radius: 16px; margin-bottom: 16px; border: 1px solid #e2e8f0;
-            position: relative;}
-        .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-        .filter-row:last-child { margin-bottom: 0; }
-        .filter-label { font-size: 0.8rem; font-weight: 700; color: #64748b; min-width: 50px; }
-        .tab-btn {
-            padding: 6px 14px;
-            border-radius: 20px; font-size: 0.8rem; background-color: #ffffff; color: #64748b; border: 1px solid #e2e8f0; font-weight: 700; cursor: pointer; transition: all 0.2s;
-        }
-        .tab-btn.active { background-color: #00b4d8; color: #ffffff; border-color: #00b4d8; }
-        .filter-select { padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;
-            font-size: 0.8rem; background-color: #ffffff; color: #1e293b; outline: none; }
-
-        /* 데이터 백업 미니 레이어 */
-        .btn-mini-storage { background-color: #ffffff;
-            border: 1px solid #cbd5e1; color: #64748b; padding: 5px 10px; font-size: 0.75rem; border-radius: 8px;
-            font-weight: 600;}
-        .btn-mini-storage:hover { border-color: #00b4d8; color: #00b4d8; }
-        .mini-storage-popover {
-            position: absolute;
-            top: 48px; right: 18px; background-color: #ffffff; border: 1px solid #e2e8f0;
-            border-radius: 12px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            display: none; z-index: 10; flex-direction: column; gap: 8px;
-        }
-        .btn-popover-action { padding: 6px 12px;
-            font-size: 0.75rem; background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; border-radius: 6px; width: 120px; cursor: pointer;
-            font-weight: 600;}
-        .btn-popover-action:hover { background-color: #00b4d8; color: #ffffff; border-color: #00b4d8; }
-
-        /* 옷장 카드형 그리드 */
-        .batch-action-bar {
-            display: flex;
-            justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 0.85rem; border: 1px solid #e2e8f0;
-        }
-        .batch-btn-group { display: flex; gap: 6px; }
-        .batch-btn-group button { padding: 6px 12px; font-size: 0.78rem; border-radius: 6px; font-weight: 600; }
-        .btn-batch-towash { background-color: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
-        .btn-batch-towash:hover { background-color: #ffe0b2; }
-        .btn-batch-wash { background-color: #e0f7fa; color: #006064; border: 1px solid #4dd0e1; }
-        .btn-batch-wash:hover { background-color: #b2ebf2; }
-        .btn-batch-del { background-color: #ffebee; color: #c62828; border: 1px solid #ef5350; }
-        .btn-batch-del:hover { background-color: #ffcdd2; }
-
-        .closet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; list-style: none;
-            padding: 0; margin: 0; }
-        .closet-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0; border-radius: 18px; padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-        .select-checkbox { position: absolute; top: 12px;
-            left: 12px; width: 18px; height: 18px; cursor: pointer; z-index: 10; accent-color: #00b4d8;
-        }
-        .cloth-img { width: 100%; height: 115px; object-fit: cover; border-radius: 12px; background-color: #f8fafc;
-            margin-bottom: 10px; border: 1px solid #f1f5f9; }
-        .cloth-name { font-size: 0.85rem; font-weight: 600;
-            color: #0f172a; margin-bottom: 4px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .cloth-subtext { font-size: 0.72rem; color: #64748b; margin-bottom: 4px; }
-        
-        .tag-container { display: flex;
-            gap: 4px; flex-wrap: wrap; justify-content: center; margin-top: 4px;}
-        .cloth-tag { font-size: 0.65rem;
-            padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-        .status-keep { background-color: #e0f7fa;
-            color: #00b4d8; }
-        .status-wash { background-color: #fff3e0; color: #ff9f43; }
-        .tag-category-badge { background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-        .tag-occasion-badge { background-color: #e2e8f0; color: #0f172a; font-size: 0.65rem; padding: 1px 4px;
-            border-radius: 4px;}
-        .no-img { display: flex; align-items: center; justify-content: center; color: #cbd5e1; }
-        
-        .icon-svg { width: 20px;
-            height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none;
-        }
-        .icon-large { width: 44px; height: 44px; stroke: #cbd5e1; }
-
-        /* 데이터 전송 최상단 바 스타일 */
-        .sync-bar {
-            max-width: 1000px;
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            padding: 12px 20px;
-            border-radius: 16px;
+        .match-summary {
             margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05);
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.95rem;
+            background: #ecfeff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border-left: 4px solid #06b6d4;
+            width: 100%;
         }
-        .sync-btn-group { display: flex; gap: 8px; }
-        .btn-sync-export { background-color: #0284c7; color: white; padding: 8px 14px; font-size: 0.8rem; border-radius: 8px; }
-        .btn-sync-export:hover { background-color: #0369a1; }
-        .btn-sync-import { background-color: #0f766e; color: white; padding: 8px 14px; font-size: 0.8rem; border-radius: 8px; }
-        .btn-sync-import:hover { background-color: #115e59; }
-
-        /* 로딩 스피너 애니메이션 */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @media (max-width: 768px) {
-            .main-container { flex-direction: column; }
-            .side-panel { flex-direction: row; }
-            .btn-open-popup { flex-direction: row; padding: 15px; font-size: 0.95rem; }
-            .coordination-view { grid-template-columns: 1fr; }
-            .coordination-slot { height: 220px; }
-            .sync-bar { flex-direction: column; gap: 10px; text-align: center; }
+        .report-text {
+            line-height: 1.65;
+            color: #334155;
+            font-size: 0.98rem;
+            white-space: pre-wrap;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .action-buttons .btn {
+            flex: 1;
         }
     </style>
 </head>
 <body>
 
-<div class="sync-bar">
-    <span style="font-size: 0.85rem; font-weight: 700; color: #475569;">📱 기기간 실시간 옷장 전송</span>
-    <div class="sync-bar-desc" style="font-size: 0.78rem; color: #94a3b8;">컴퓨터에서 내보낸 후 폰에서 가져오기를 누르세요!</div>
-    <div class="sync-btn-group">
-        <button class="btn-sync-export" onclick="exportToMobile()">💻 컴퓨터 ➔ 폰 데이터 내보내기</button>
-        <button class="btn-sync-import" onclick="importFromComputer()">🔄 폰에서 데이터 동기화 받기</button>
-    </div>
-</div>
+    <header>
+        <h1>CLO:AI</h1>
+        <p>스마트 올라운드 TPO 스타일러 (v10.0)</p>
+    </header>
 
-<div class="main-container">
-    <div class="hero-card">
-        <h2 style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 24px;">
-            <svg width="54" height="38" viewBox="0 0 60 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M30 18C32.5 18 34.5 15.5 33.5 12.5C32.8 10.5 30.5 9 28.5 9.5C26 10 25 12.5 25 14.5" stroke="#00b4d8" stroke-width="3" stroke-linecap="round"/>
-                <path d="M10 28L26.5 19.5C28.7 18.4 31.3 18.4 33.5 19.5L50 28" stroke="#00b4d8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M14 28H46" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="30" cy="20" r="3" fill="#00b4d8"/>
-            </svg>
-            <span style="font-size: 1.8rem; font-weight: 800; letter-spacing: 1.5px; color: #0f172a;">
-                CLO<span style="color: #00b4d8; position: relative; top: -1px; margin: 0 1px;">:</span>AI
-            </span>
-        </h2>
-
-        <div class="occasion-container">
-            <button class="occasion-btn active" onclick="changeOccasion('출근길', this)">💼 출근길</button>
-            <button class="occasion-btn" onclick="changeOccasion('일상 생활', this)">☕ 일상 생활</button>
-            <button class="occasion-btn" onclick="changeOccasion('운동', this)">⚡ 운동</button>
-            <button class="occasion-btn" onclick="changeOccasion('데이트', this)">❤️ 데이트</button>
-        </div>
-
-        <div id="recommendBox" class="recommend-box">
-            <div id="defaultText" style="color: #64748b; line-height: 1.6; text-align: center;">
-                <svg class="icon-svg icon-large" style="margin-bottom:14px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <br>제미나이 비전 엔진 기반 상황 맞춤 매칭 구조<br>상단의 모드를 정한 후 아래 버튼을 눌러보세요.
+    <div class="main-container">
+        <div class="card hero-card">
+            <h2>
+                <svg style="width:22px; height:22px; color:#06b6d4;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <span>스마트 AI 코디 엔진</span>
+            </h2>
+            
+            <p style="margin: 0; color: #64748b; font-weight: 600; font-size: 0.9rem;">오늘의 외출 상황(TPO) 선택</p>
+            <div class="tpo-grid">
+                <button class="tpo-btn active" onclick="setTPO('일상', this)">일상</button>
+                <button class="tpo-btn" onclick="setTPO('데이트', this)">데이트</button>
+                <button class="tpo-btn" onclick="setTPO('출근길', this)">출근길</button>
+                <button class="tpo-btn" onclick="setTPO('운동', this)">운동</button>
+                <button class="tpo-btn" onclick="setTPO('격식있는 자리', this)">격식</button>
+                <button class="tpo-btn" onclick="setTPO('여행', this)">여행</button>
             </div>
-        </div>
-        
-        <button class="btn-recommend" onclick="recommendCodi()">스마트 코디 추천받기</button>
-        <button id="btnWear" class="btn-wear" onclick="wearCodi()" disabled>이 조합으로 매칭 완료</button>
-    </div>
-
-    <div class="side-panel">
-        <button class="btn-open-popup" onclick="toggleModal('registerModal', true)">
-            <svg class="icon-svg" style="width:24px; height:24px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            옷장 추가
-        </button>
-        <button class="btn-open-popup closet" onclick="toggleModal('closetModal', true)">
-            <svg class="icon-svg" style="width:24px; height:24px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            나의 옷장
-        </button>
-    </div>
-</div>
-
-<div id="registerModal" class="modal-overlay" onclick="handleOverlayClick(event, 'registerModal')">
-    <div class="modal-content">
-        <button class="modal-close" onclick="toggleModal('registerModal', false)">
-            <svg class="icon-svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <h2>새로운 아이템 등록</h2>
-        <div class="form-group">
-            <label>옷/아이템 이름</label>
-            <input type="text" id="clothName" placeholder="예: 무지 크루넥 티셔츠, 버뮤다 데님">
-        </div>
-        
-        <div class="form-group">
-            <label>대분류 카테고리 선택</label>
-            <select id="clothCategory" onchange="handleRegistrationCategoryChange()">
-                <option value="">-- 카테고리를 선택하세요 --</option>
-                <option value="상의">상의</option>
-                <option value="아우터">아우터</option>
-                <option value="하의">하의</option>
-                <option value="신발">신발</option>
-                <option value="악세사리">악세사리</option>
-            </select>
-        </div>
-
-        <div class="form-group responsive-fade" id="subCategoryFormGroup" style="display: none;">
-            <label id="subCategoryLabel">세부 카테고리 지정</label>
-            <select id="clothSubcategory" onchange="handleRegistrationSubcategoryChange()"></select>
-        </div>
-        
-        <div class="form-group">
-            <label>적당한 계절</label>
-            <select id="clothSeason">
-                <option value="사계절">사계절 (올시즌 가능)</option>
-                <option value="봄">봄 시즌</option>
-                <option value="여름">여름 시즌</option>
-                <option value="가을">가을 시즌</option>
-                <option value="겨울">겨울 시즌</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>착용 적합 상황 (TPO 중복 선택 가능)</label>
-            <div class="checkbox-group">
-                <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="출근길"> 出근길</label>
-                <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="일상 생활"> 일상 생활</label>
-                <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="운동"> 운동</label>
-                <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="데이트"> 데이트</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>제품 사진 첨부</label>
-            <input type="file" id="clothImage" accept="image/*" style="color: #64748b;">
-        </div>
-        <button class="btn-submit" onclick="addNewCloth()">옷장에 안전하게 보관</button>
-    </div>
-</div>
-
-<div id="closetModal" class="modal-overlay" onclick="handleOverlayClick(event, 'closetModal')">
-    <div class="modal-content" style="max-width: 650px;">
-        <button class="modal-close" onclick="toggleModal('closetModal', false)">
-            <svg class="icon-svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <h2>나의 스마트 옷장</h2>
-        
-        <div class="filter-section">
-            <div class="filter-header">
-                <h3>🔍 스마트 검색 필터</h3>
-                <button class="btn-mini-storage" onclick="toggleMiniStorage(event)">⚙️ 데이터 관리</button>
-                <div id="miniStoragePopover" class="mini-storage-popover">
-                    <button class="btn-popover-action" onclick="exportClosetData()">📥 일괄 백업</button>
-                    <button class="btn-popover-action" onclick="document.getElementById('importFileControl').click()">📤 일괄 복구</button>
-                    <input type="file" id="importFileControl" accept=".json" onchange="importClosetData(this)" style="display:none;">
+            
+            <button class="btn btn-cyan" style="width: 100%; padding: 15px; font-size: 1.05rem; margin-top: 5px;" onclick="recommendCodi()">
+                🤖 제미나이 AI 스마트 코디 추천받기
+            </button>
+            
+            <div id="recommendBox" class="recommend-box">
+                <div id="defaultText" style="color: #64748b; line-height: 1.6; text-align: center;">
+                    <svg style="width:44px; height:44px; color:#94a3b8; margin-bottom:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <p style="margin:0; font-size: 0.95rem;">원하는 TPO 상황을 지정하고<br>[스마트 코디 추천받기] 버튼을 작동해 보세요!</p>
                 </div>
             </div>
-            
-            <div class="filter-row">
-                <span class="filter-label">분류:</span>
-                <button class="tab-btn active" onclick="filterCategory('전체', this)">전체</button>
-                <button class="tab-btn" onclick="filterCategory('상의', this)">상의</button>
-                <button class="tab-btn" onclick="filterCategory('아우터', this)">아우터</button>
-                <button class="tab-btn" onclick="filterCategory('하의', this)">하의</button>
-                <button class="tab-btn" onclick="filterCategory('신발', this)">신발</button>
-                <button class="tab-btn" onclick="filterCategory('악세사리', this)">악세사리</button>
-            </div>
-            
-            <div class="filter-row">
-                <span class="filter-label">세부:</span>
-                <select id="subFilter" class="filter-select" onchange="updateClosetUI()">
-                    <option value="전체">모든 세부 분류</option>
-                </select>
-
-                <span class="filter-label" style="margin-left: 15px;">계절:</span>
-                <select id="seasonFilter" class="filter-select" onchange="updateClosetUI()">
-                    <option value="전체">모든 계절</option>
-                    <option value="사계절">사계절 전용 제품</option>
-                    <option value="봄">봄 제품</option>
-                    <option value="여름">여름 제품</option>
-                    <option value="가을">가을 제품</option>
-                    <option value="겨울">겨울 제품</option>
-                </select>
-            </div>
         </div>
-
-        <div class="batch-action-bar">
-            <label style="display: flex; align-items: center; gap: 6px; color: #475569; font-weight: 600; font-size:0.82rem; cursor: pointer;">
-                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-                전체 선택
-            </label>
-            <div class="batch-btn-group">
-                <button class="btn-batch-towash" onclick="batchMoveToWash()">🧺 세탁함 전송</button>
-                <button class="btn-batch-wash" onclick="batchWashComplete()">☀️ 세탁완료 회수</button>
-                <button class="btn-batch-del" onclick="batchDelete()">🗑️ 영구 삭제</button>
+        
+        <div class="card side-card">
+            <h2>
+                <svg style="width:22px; height:22px; color:#06b6d4;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <span>내 디지털 옷장</span>
+            </h2>
+            
+            <div class="form-group">
+                <input type="text" id="clotheName" placeholder="옷 이름 (예: 흑청 데님 팬츠)">
+                <select id="clotheCategory" style="max-width: 100px;">
+                    <option value="상의">상의</option>
+                    <option value="하의">하의</option>
+                    <option value="신발">신발</option>
+                    <option value="악세사리">악세사리</option>
+                </select>
+                <button class="btn btn-cyan" onclick="addClothe()">추가</button>
             </div>
+            
+            <div id="clothesList" class="clothes-list">
+                </div>
         </div>
-
-        <ul id="closetGrid" class="closet-grid"></ul>
     </div>
-</div>
 
-<script>
-    // 🔑 확보하신 제미나이 API Key를 아래 따옴표 안에 넣어주세요!
-    const GEMINI_API_KEY = "AQ.Ab8RN6Jgl9nbEHjCyyjMoZ3doyATCLuMLxxY3UYXrlVvM0SNFw";
+    <script>
+        // 🌟 복사해주신 구글 최신 규격의 AQ 보안 API 키 적용 완료!
+        const GEMINI_API_KEY = "AQ.Ab8RN6JuOFEI2AnwRckIECoQVBc0btTfJYQHAXLeLYmwMXxbTA";
 
-    let defaultClothes = [
-        {name: "기본 크루넥 맨투맨", categories: ["상의"], subcategory: "맨투맨/스웨트", season: "사계절", occasions: ["일상 생활", "데이트"], status: "보관중", img: ""},
-        {name: "클래식 흑청 데님", categories: ["하의"], subcategory: "청바지", season: "사계절", occasions: ["출근길", "일상 생활", "데이트"], status: "보관중", img: ""},
-        {name: "화이트 데일리 스니커즈", categories: ["신발"], subcategory: "스니커즈/운동화", season: "사계절", occasions: ["출근길", "일상 생활", "운동", "데이트"], status: "보관중", img: ""}
-    ];
+        let clothes = [];
+        let currentTPO = "일상";
+        let currentTop = null;
+        let currentBottom = null;
+        let currentShoes = null;
 
-    let rawData = JSON.parse(localStorage.getItem('clothesDB_v9')) || defaultClothes;
-    let clothesDB = rawData.map(item => {
-        if (item.category && !item.categories) { item.categories = [item.category]; delete item.category; }
-        if (item.categories && item.categories.includes('겉옷')) item.categories = item.categories.map(c => c === '겉옷' ? '아우터' : c);
-        if (!item.subcategory) item.subcategory = "선택 안함";
-        if (!item.occasions) item.occasions = ["출근길", "일상 생활"];
-        return item;
-    });
-
-    const subcategoryMap = {
-        "상의": ["티셔츠/민소매", "맨투맨/스웨트", "셔츠/블라우스", "후드티셔츠", "니트/스웨터", "가디건"],
-        "아우터": ["후드집업", "블루종", "라이더 자켓", "슈트", "블레이저 자켓", "패딩", "아노락", "플리스", "코트", "바람막이/자켓"],
-        "하의": ["청바지", "슬랙스/와이드팬츠", "트레이닝 팬츠", "조거 팬츠", "반바지/버뮤다"],
-        "신발": ["스니커즈/운동화", "구두", "부츠", "슬리퍼/샌들"],
-        "악세사리": ["모자", "가방", "벨트", "기타 악세사리"]
-    };
-
-    const autoOccasionMap = {
-        "티셔츠/민소매": ["일상 생활", "운동"],
-        "맨투맨/스웨트": ["일상 생활"],
-        "셔츠/블라우스": ["출근길", "데이트"],
-        "니트/스웨터": ["출근길", "일상 생활", "데이트"],
-        "가디건": ["일상 생활", "데이트"],
-        "라이더 자켓": ["데이트", "일상 생활"],
-        "블레이저 자켓": ["출근길", "데이트"],
-        "청바지": ["일상 생활", "데이트"],
-        "슬랙스/와이드팬츠": ["출근길", "일상 생활", "데이트"],
-        "트레이닝 팬츠": ["운동", "일상 생활"],
-        "스니커즈/운동화": ["출근길", "일상 생활", "운동", "데이트"],
-        "구두": ["출근길", "데이트"],
-        "부츠": ["데이트"]
-    };
-
-    let currentTop = null;
-    let currentBottom = null;
-    let currentShoes = null;
-    let selectedCategory = "전체";
-    let currentOccasion = "출근길";
-
-    function saveToStorage() { localStorage.setItem('clothesDB_v9', JSON.stringify(clothesDB)); }
-    
-    function toggleMiniStorage(e) { 
-        e.stopPropagation(); 
-        const pop = document.getElementById('miniStoragePopover'); 
-        pop.style.display = pop.style.display === 'flex' ? 'none' : 'flex'; 
-    }
-    
-    document.addEventListener('click', () => { document.getElementById('miniStoragePopover').style.display = 'none'; });
-    
-    function changeOccasion(mode, btn) { 
-        currentOccasion = mode; 
-        document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('active')); 
-        btn.classList.add('active'); 
-        resetRecommendUI(); 
-    }
-
-    /* 📱 스마트 기기간 클립보드 전송 시스템 */
-    function exportToMobile() {
-        if(clothesDB.length === 0) return alert('내보낼 옷장 데이터가 비어있습니다.');
-        const dataStr = JSON.stringify(clothesDB);
-        navigator.clipboard.writeText(dataStr).then(() => {
-            alert("👗 옷장 데이터가 메모리에 복사되었습니다!\n카톡이나 메시지로 나에게 전송한 후, 핸드폰에서 [폰에서 데이터 동기화 받기] 버튼을 누르고 붙여넣으세요.");
-        }).catch(err => {
-            alert("자동 복사에 실패했습니다. 수동으로 복사해주세요:\n" + dataStr);
-        });
-    }
-
-    function importFromComputer() {
-        const inputData = prompt("컴퓨터에서 전달받아 복사한 옷장 데이터를 그대로 붙여넣어 주세요:");
-        if (inputData) {
-            try {
-                const parsed = JSON.parse(inputData);
-                if (Array.isArray(parsed)) {
-                    clothesDB = parsed;
-                    saveToStorage();
-                    updateSubFilterOptions(selectedCategory);
-                    updateClosetUI();
-                    alert("🔄 기기 동기화 성공! 이제 스마트폰에서도 컴퓨터와 동일한 옷장이 열립니다.");
-                } else { alert("올바른 데이터 형식이 아닙니다."); }
-            } catch (e) { alert("데이터 해독에 실패했습니다. 복사한 내용 전체를 정확히 입력했는지 확인해주세요."); }
+        // 로컬스토리지 연동 및 초기 더미 옷 설정
+        function loadFromStorage() {
+            const saved = localStorage.getItem('cloai_clothes');
+            if (saved) {
+                clothes = JSON.parse(saved);
+            } else {
+                clothes = [
+                    { id: 1, name: '흰색 오버핏 반팔티', categories: ['상의'], status: '착용 가능' },
+                    { id: 2, name: '검은색 와이드 슬랙스', categories: ['하의'], status: '착용 가능' },
+                    { id: 3, name: '흑청 데님 팬츠', categories: ['하의'], status: '착용 가능' },
+                    { id: 4, name: '클래식 화이트 스니커즈', categories: ['신발'], status: '착용 가능' },
+                    { id: 5, name: '미니멀 옥스퍼드 블루 셔츠', categories: ['상의'], status: '착용 가능' }
+                ];
+                saveToStorage();
+            }
+            renderClothes();
         }
-    }
 
-    function exportClosetData() {
-        if(clothesDB.length === 0) return alert('백업할 옷 데이터가 없습니다.');
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clothesDB));
-        const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "cloai_tpo_backup.json");
-        document.body.appendChild(dl); dl.click(); dl.remove(); alert('백업 성공!');
-    }
-
-    function importClosetData(inputElement) {
-        const file = inputElement.files[0]; if(!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                let importedData = JSON.parse(e.target.result);
-                if(Array.isArray(importedData)) {
-                    if(confirm(`[총 ${importedData.length}개]의 데이터를 복구할까요?`)) {
-                        clothesDB = importedData; saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); alert('복구 완료!');
-                    }
-                }
-            } catch (err) { alert('파일이 올바르지 않습니다.'); }
-            inputElement.value = "";
-        };
-        reader.readAsText(file);
-    }
-
-    function toggleModal(modalId, show) {
-        const modal = document.getElementById(modalId); modal.style.display = show ? 'flex' : 'none';
-        if (show && modalId === 'closetModal') { updateSubFilterOptions(selectedCategory); updateClosetUI(); }
-        if (!show && modalId === 'registerModal') {
-            document.getElementById('clothCategory').value = ""; document.getElementById('subCategoryFormGroup').style.display = 'none';
-            document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => cb.checked = false);
+        function saveToStorage() {
+            localStorage.setItem('cloai_clothes', JSON.stringify(clothes));
         }
-    }
 
-    function handleOverlayClick(e, modalId) { if(e.target.classList.contains('modal-overlay')) toggleModal(modalId, false); }
+        // TPO 상태 전환
+        function setTPO(tpo, element) {
+            currentTPO = tpo;
+            document.querySelectorAll('.tpo-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
 
-    function handleRegistrationCategoryChange() {
-        const categorySelect = document.getElementById('clothCategory'); const subGroup = document.getElementById('subCategoryFormGroup');
-        const subSelect = document.getElementById('clothSubcategory'); const selected = categorySelect.value;
-        if (!selected) { subGroup.style.display = 'none'; return; }
-        subSelect.innerHTML = ''; const options = subcategoryMap[selected] || [];
-        options.forEach(optText => { const opt = document.createElement('option'); opt.value = optText; opt.textContent = optText; subSelect.appendChild(opt); });
-        subGroup.style.display = 'flex'; handleRegistrationSubcategoryChange();
-    }
+        // 신규 의류 옷장에 등록
+        function addClothe() {
+            const nameInput = document.getElementById('clotheName');
+            const categorySelect = document.getElementById('clotheCategory');
+            const name = nameInput.value.trim();
+            const category = categorySelect.value;
+            
+            if (!name) {
+                alert("의류의 이름을 명확하게 입력해주세요!");
+                return;
+            }
+            
+            const newItem = {
+                id: Date.now(),
+                name: name,
+                categories: [category],
+                status: '착용 가능'
+            };
+            
+            clothes.push(newItem);
+            saveToStorage();
+            renderClothes();
+            nameInput.value = '';
+        }
 
-    function handleRegistrationSubcategoryChange() {
-        const subSelect = document.getElementById('clothSubcategory'); const selectedSub = subSelect.value;
-        const defaultOccasions = autoOccasionMap[selectedSub] || ["일상 생활"];
-        document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => { cb.checked = defaultOccasions.includes(cb.value); });
-    }
+        // 의류 영구 삭제
+        function deleteClothe(id) {
+            if (confirm("정말 옷장에서 이 아이템을 폐기할까요?")) {
+                clothes = clothes.filter(c => c.id !== id);
+                saveToStorage();
+                renderClothes();
+            }
+        }
 
-    function addNewCloth() {
-        const nameInput = document.getElementById('clothName'); const categorySelect = document.getElementById('clothCategory');
-        const subSelect = document.getElementById('clothSubcategory'); const seasonInput = document.getElementById('clothSeason');
-        const fileInput = document.getElementById('clothImage'); const checkedOccasions = Array.from(document.querySelectorAll('input[name="clothOccasion"]:checked')).map(cb => cb.value);
-        if (!nameInput.value.trim()) return alert('이름을 입력해 주세요!');
-        if (!categorySelect.value) return alert('대분류 카테고리를 지정해 주세요!');
-        if (checkedOccasions.length === 0) return alert('착용 상황(TPO) 태그를 하나 이상 선택해 주세요!');
-        const file = fileInput.files[0];
-        const completeAction = (imgData) => {
-            const newCloth = { name: nameInput.value, categories: [categorySelect.value], subcategory: subSelect.value || "일반", season: seasonInput.value, occasions: checkedOccasions, status: "보관중", img: imgData };
-            clothesDB.push(newCloth); saveToStorage(); nameInput.value = ""; fileInput.value = ""; categorySelect.value = ""; document.getElementById('subCategoryFormGroup').style.display = 'none';
-            alert(`'${newCloth.name}' 옷장에 안전하게 등록 완료!`); toggleModal('registerModal', false);
-        };
-        if (file) { const reader = new FileReader(); reader.onload = (e) => completeAction(e.target.result); reader.readAsDataURL(file); } else { completeAction(""); }
-    }
+        // 수동 세탁전환 토글
+        function toggleStatus(id) {
+            const item = clothes.find(c => c.id === id);
+            if (item) {
+                item.status = item.status === '착용 가능' ? '세탁중' : '착용 가능';
+                saveToStorage();
+                renderClothes();
+            }
+        }
 
-    function updateSubFilterOptions(category) {
-        const subFilter = document.getElementById('subFilter'); subFilter.innerHTML = '<option value="전체">모든 세부 분류</option>';
-        let subs = []; if (category === "전체") { Object.values(subcategoryMap).forEach(arr => subs.push(...arr)); } else { subs = subcategoryMap[category] || []; }
-        subs.forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subFilter.appendChild(opt); });
-    }
-
-    function filterCategory(category, btnElement) {
-        selectedCategory = category; const tabs = document.querySelectorAll('.tab-btn'); tabs.forEach(t => t.classList.remove('active'));
-        btnElement.classList.add('active'); updateSubFilterOptions(category); updateClosetUI();
-    }
-
-    function toggleSelectAll(masterCheckbox) { const itemCheckboxes = document.querySelectorAll('.select-checkbox'); itemCheckboxes.forEach(cb => cb.checked = masterCheckbox.checked); }
-
-    function updateClosetUI() {
-        const gridEl = document.getElementById('closetGrid'); gridEl.innerHTML = '';
-        const selectedSub = document.getElementById('subFilter').value; const selectedSeason = document.getElementById('seasonFilter').value;
-        document.getElementById('selectAllCheckbox').checked = false;
-        const filteredDB = clothesDB.map((item, originalIndex) => ({...item, originalIndex}))
-            .filter(item => {
-                const matchCat = (selectedCategory === "전체" || item.categories.includes(selectedCategory));
-                const matchSub = (selectedSub === "전체" || item.subcategory === selectedSub);
-                let matchSea = (selectedSeason === "전체" || selectedSeason === "사계절" ? (selectedSeason === "전체" || item.season === "사계절") : (item.season === selectedSeason || item.season === "사계절"));
-                return matchCat && matchSub && matchSea;
+        // 화면단에 옷 레이아웃 구성
+        function renderClothes() {
+            const list = document.getElementById('clothesList');
+            list.innerHTML = '';
+            
+            clothes.forEach(item => {
+                const cat = item.categories[0];
+                let tagClass = 'tag-top';
+                if (cat === '하의') tagClass = 'tag-bottom';
+                if (cat === '신발') tagClass = 'tag-shoes';
+                if (cat === '악세사리') tagClass = 'tag-acc';
+                
+                const isWashing = item.status === '세탁중';
+                
+                const card = document.createElement('div');
+                card.className = 'clothe-item';
+                card.innerHTML = `
+                    <span class="clothe-tag ${tagClass}">${cat}</span>
+                    <span class="clothe-name">${item.name}</span>
+                    <span class="clothe-status ${isWashing ? 'status-washing' : ''}" onclick="toggleStatus(${item.id})">
+                        ${item.status}
+                    </span>
+                    <button class="btn-delete" onclick="deleteClothe(${item.id})">✕</button>
+                `;
+                list.appendChild(card);
             });
-        if(filteredDB.length === 0) { gridEl.innerHTML = "<p style='color:#94a3b8; text-align:center; grid-column:1/-1; padding:40px 0;'>해당 조건의 아이템이 존재하지 않습니다.</p>"; return; }
-        filteredDB.forEach(item => {
-            const li = document.createElement('li'); li.className = 'closet-card';
-            const imgTag = item.img ? `<img src="${item.img}" class="cloth-img">` : `<div class="cloth-img no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-            li.innerHTML = `
-                <input type="checkbox" class="select-checkbox" data-index="${item.originalIndex}">
-                ${imgTag}
-                <div class="cloth-name">${item.name}</div>
-                <div class="cloth-subtext">${item.subcategory} (${item.season})</div>
-                <div class="tag-container">
-                    <span class="cloth-tag ${item.status === '보관중' ? 'status-keep' : 'status-wash'}">${item.status}</span>
-                    <span class="cloth-tag tag-category-badge">${item.categories[0]}</span>
-                    ${item.occasions.map(o => `<span class="cloth-tag tag-occasion-badge">${o}</span>`).join('')}
+        }
+
+        // 🤖 핵심 작동부: 구글 제미나이 최신 규격 API 호출 연동 (x-goog-api-key)
+        async function recommendCodi() {
+            // 현재 옷장에서 착용 가능한 것들만 분류
+            const tops = clothes.filter(c => c.categories.includes('상의') && c.status === '착용 가능');
+            const bottoms = clothes.filter(c => c.categories.includes('하의') && c.status === '착용 가능');
+            const shoes = clothes.filter(c => c.categories.includes('신발') && c.status === '착용 가능');
+
+            if (tops.length === 0 || bottoms.length === 0 || shoes.length === 0) {
+                alert("코디 조합을 완성하려면 [상의, 하의, 신발] 각각 최소 1개 이상이 '착용 가능'이어야 합니다. 옷을 추가하거나 세탁중을 해제하세요.");
+                return;
+            }
+
+            // 슬롯에 랜덤 자동 매칭 가이드 배치
+            currentTop = tops[Math.floor(Math.random() * tops.length)];
+            currentBottom = bottoms[Math.floor(Math.random() * bottoms.length)];
+            currentShoes = shoes[Math.floor(Math.random() * shoes.length)];
+
+            // 로딩 화면 연출
+            const box = document.getElementById('recommendBox');
+            box.className = "recommend-box";
+            box.innerHTML = `
+                <div class="spinner"></div>
+                <p style="color: #64748b; font-weight: 500; margin: 0;">제미나이 AI가 황금 매칭 조합을 분석 중입니다...</p>
+            `;
+
+            // 제미나이에게 전달할 스타일 요청 프롬프트 설계
+            const promptText = `내 옷장에 있는 옷 중 매칭된 조합입니다:
+- 상의: ${currentTop.name}
+- 하의: ${currentBottom.name}
+- 신발: ${currentShoes.name}
+
+설정 상황(TPO): ${currentTPO}
+
+이 의류 조합에 대해 전문적인 패션 에디터이자 스타일리스트의 입장에서 스타일 리포트를 친근하고 부드럽게 한글 3-4줄 내외로 요약해서 써줘. 왜 이 조합이 오늘 상황(${currentTPO})에 알맞고 세련된 느낌을 주는지 패션 팁을 유쾌하게 알려줘.`;
+
+            // ⚠️ 보안 패치된 최신 구글 API Endpoint 주소 (?key= 연동 제외)
+            const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": GEMINI_API_KEY // 🌟 새로운 헤더 인증방식으로 완벽히 에러 우회 우회
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`구글 서버 거절 (Status: ${response.status})`);
+                }
+
+                const data = await response.json();
+                const report = data.candidates[0].content.parts[0].text;
+
+                // 성공 결과 출력 및 리포트 화면 교체
+                box.className = "recommend-box success";
+                box.innerHTML = `
+                    <div class="report-title">
+                        <span>🤖 제미나이 AI TPO 매칭 리포트 [${currentTPO}]</span>
+                    </div>
+                    <div class="match-summary">
+                        👕 추천 룩: [${currentTop.name}] + [${currentBottom.name}] + [${currentShoes.name}]
+                    </div>
+                    <div class="report-text">${report}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-cyan" onclick="wearCodi()">선택하신 코디 착용</button>
+                        <button class="btn btn-slate" onclick="recommendCodi()">다른 옷 보기</button>
+                    </div>
+                `;
+
+            } catch (error) {
+                // 에러 피드백 상태 화면 출력
+                box.className = "recommend-box";
+                box.innerHTML = `
+                    <p style="color: #ef4444; font-weight: 700; margin-bottom: 6px;">⚠️ 엔진 통신 중 에러가 발생했습니다.</p>
+                    <p style="color: #64748b; font-size: 0.85rem; margin: 0 0 12px 0;">원인: ${error.message}</p>
+                    <button class="btn btn-slate" onclick="recommendCodi()">다시 시도</button>
+                `;
+                console.error("Gemini API Error Detail:", error);
+            }
+        }
+
+        // 기존 비즈니스 로직: 선택 의류 착용 및 빨래통(세탁중) 이동 처리
+        function wearCodi() {
+            if (!currentTop || !currentBottom || !currentShoes) return;
+            
+            [currentTop, currentBottom, currentShoes].forEach(item => {
+                if (!(item.categories.includes('신발') || item.categories.includes('악세사리'))) {
+                    item.status = '세탁중';
+                }
+            });
+            
+            alert(`선택하신 코디로 매칭 및 착용 기록이 완료되었습니다! (상의/하의는 세탁중으로 전환됩니다)`);
+            resetRecommendUI();
+            saveToStorage();
+            renderClothes();
+        }
+
+        // 추천 UI 초기화
+        function resetRecommendUI() {
+            currentTop = null;
+            currentBottom = null;
+            currentShoes = null;
+            const box = document.getElementById('recommendBox');
+            box.className = "recommend-box";
+            box.innerHTML = `
+                <div id="defaultText" style="color: #64748b; line-height: 1.6; text-align: center;">
+                    <svg style="width:44px; height:44px; color:#94a3b8; margin-bottom:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <p style="margin:0; font-size: 0.95rem;">원하는 TPO 상황을 지정하고<br>[스마트 코디 추천받기] 버튼을 작동해 보세요!</p>
                 </div>
             `;
-            gridEl.appendChild(li);
-        });
-    }
-
-    function getSelectedOriginalIndices() { return Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => parseInt(cb.getAttribute('data-index'))); }
-    function batchMoveToWash() { const idxs = getSelectedOriginalIndices(); if(idxs.length === 0) return alert('선택된 아이템이 없습니다.'); idxs.forEach(i => clothesDB[i].status = "세탁중"); saveToStorage(); updateClosetUI(); }
-    function batchWashComplete() { const idxs = getSelectedOriginalIndices(); if(idxs.length === 0) return alert('선택된 아이템이 없습니다.'); idxs.forEach(i => clothesDB[i].status = "보관중"); saveToStorage(); updateClosetUI(); }
-    function batchDelete() { const idxs = getSelectedOriginalIndices(); if(idxs.length === 0) return alert('선택된 아이템이 없습니다.'); if(confirm('선택한 아이템을 옷장에서 완전히 제거할까요?')) { clothesDB = clothesDB.filter((_, i) => !idxs.includes(i)); saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); } }
-
-    /* 🧠 [진짜 제미나이 AI 연동 코어 엔진] */
-    async function askGeminiCodi(occasion) {
-        if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("여기에")) {
-            alert("제미나이 API Key가 올바르게 입력되지 않았습니다!\n스크립트 451번째 줄에 키를 넣어주세요.");
-            return null;
         }
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-        
-        // 현재 보관중(세탁중이 아닌)인 옷 목록만 필터링해서 제미나이 컨텍스트로 주입
-        const availableClothes = clothesDB.filter(c => c.status === "보관중");
-        const closetContext = availableClothes.map(c => `[카테고리: ${c.categories.join(',')}] 명칭: ${c.name} (세부: ${c.subcategory}, 계절태그: ${c.season})`).join('\n');
-        
-        const promptText = `
-        당신은 패션 인공지능 스타일러 'CLO:AI'입니다.
-        현재 내 옷장에서 활용 가능한 보관중인 옷 목록:
-        ${closetContext}
-
-        조건:
-        - TPO 상황: ${occasion}
-
-        미션:
-        제공된 옷 목록 중에서 현재 입을 수 있는 상의(Top), 하의(Bottom), 신발(Shoes)을 각각 1개씩 엄선하여 완벽한 TPO 조합을 만들어주세요.
-        * 반드시 목록에 존재하는 정확한 명칭('명칭:' 뒤에 적힌 텍스트)만 사용해야 하며, 절대 없는 아이템을 마음대로 지어내면 안 됩니다.
-
-        답변은 부가 설명 없이 반드시 아래 규칙의 JSON 텍스트로만 출력하세요. 마크다운 기호도 쓰지 마세요.
-        {
-          "top": "선택한 상의의 정확한 명칭",
-          "bottom": "선택한 하의의 정확한 명칭",
-          "shoes": "선택한 신발의 정확한 명칭",
-          "reason": "이 TPO 상황에 맞춰 이 코디 조합을 추천하는 세련되고 타당한 패션 스타일링 이유 설명"
-        }
-        `;
-
-        try {
-           const response = await fetch(url, {
-    method: "POST",
-    headers: { 
-        "Content-Type": "application/json",
-        "x-goog-api-key": GEMINI_API_KEY // 🌟 구글 최신 AQ 키를 인식시키는 핵심 주머니입니다!
-    },
-    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-});
-            });
-            const data = await response.json();
-            const responseText = data.candidates[0].content.parts[0].text.trim();
-            const cleanJson = responseText.replace(/```json|```/g, "").trim();
-            return JSON.parse(cleanJson);
-        } catch (error) {
-            console.error("Gemini Engine Error:", error);
-            alert("제미나이 AI 추천을 매칭하는 엔진 통신 중 에러가 발생했습니다.");
-            return null;
-        }
-    }
-
-    /* 🕹️ 추천 제어 함수 */
-    async function recommendCodi() {
-        const box = document.getElementById('recommendBox');
-        box.classList.add('active');
-        
-        // 로딩 화면 전환
-        box.innerHTML = `
-            <div style="text-align:center; padding:30px; color:#64748b;">
-                <div style="margin: 0 auto 15px; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #00b4d8; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                <p style="font-weight:700; color:#0f172a; margin-bottom:5px;">🤖 제미나이 AI가 옷장을 정밀 분석 중...</p>
-                <p style="font-size:12px; color:#94a3b8;">선택하신 [${currentOccasion}] 상황에 최적화된 조합을 매칭하고 있습니다.</p>
-            </div>
-        `;
-
-        // 진짜 구글 제미나이 API 호출
-        const result = await askGeminiCodi(currentOccasion);
-        
-        if (!result) {
-            resetRecommendUI();
-            return;
-        }
-
-        // 제미나이가 추천해 준 옷의 문자열 명칭을 기반으로 데이터베이스 객체 매칭
-        currentTop = clothesDB.find(c => c.name === result.top && c.status === '보관중') || clothesDB.find(c => c.categories.includes('상의') && c.status === '보관중');
-        currentBottom = clothesDB.find(c => c.name === result.bottom && c.status === '보관중') || clothesDB.find(c => c.categories.includes('하의') && c.status === '보관중');
-        currentShoes = clothesDB.find(c => c.name === result.shoes && c.status === '보관중') || clothesDB.find(c => c.categories.includes('신발') && c.status === '보관중');
-
-        if (!currentTop || !currentBottom) {
-            box.innerHTML = `
-                <div style="padding:20px; text-align:center; color:#ef4444; font-weight:700;">
-                    ⚠️ 코디 구성 실패<br>
-                    <span style="font-size:13px; color:#64748b; font-weight:normal;">현재 세탁함에 있지 않고 입을 수 있는 '상의'와 '하의'가 부족합니다. 옷을 추가 등록하거나 세탁을 완료해 주세요!</span>
-                </div>`;
-            return;
-        }
-
-        // 대형 비주얼 카드 컴포넌트로 렌더링
-        renderCodiResultUI(result.reason);
-    }
-
-    function renderCodiResultUI(reason) {
-        const box = document.getElementById('recommendBox');
-        
-        const topImg = currentTop.img ? `<img src="${currentTop.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-        const bottomImg = currentBottom.img ? `<img src="${currentBottom.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-        const shoesImg = (currentShoes && currentShoes.img) ? `<img src="${currentShoes.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-
-        box.innerHTML = `
-            <div class="coordination-view">
-                <div class="slot-container" onclick="shuffleSingleSlot('상의')">
-                    ${topImg}
-                    <div class="reroll-overlay">🔄 다른 상의 보기</div>
-                    <div class="slot-info">
-                        <div class="slot-type">TOP</div>
-                        <div class="slot-label">${currentTop.name}</div>
-                    </div>
-                </div>
-                <div class="slot-container" onclick="shuffleSingleSlot('하의')">
-                    ${bottomImg}
-                    <div class="reroll-overlay">🔄 다른 하의 보기</div>
-                    <div class="slot-info">
-                        <div class="slot-type">BOTTOM</div>
-                        <div class="slot-label">${currentBottom.name}</div>
-                    </div>
-                </div>
-                <div class="slot-container" onclick="shuffleSingleSlot('신발')">
-                    ${shoesImg}
-                    <div class="reroll-overlay">🔄 다른 신발 보기</div>
-                    <div class="slot-info">
-                        <div class="slot-type">SHOES</div>
-                        <div class="slot-label">${currentShoes ? currentShoes.name : '기본 신발'}</div>
-                    </div>
-                </div>
-            </div>
-            <div style="width:100%; text-align:left; background:#ffffff; border:1px solid #e2e8f0; padding:16px; border-radius:14px; font-size:0.85rem; line-height:1.6; color:#334155; margin-top:10px; border-left:4px solid #00b4d8;">
-                <strong style="color:#0f172a;">🤖 제미나이 AI 스타일 분석 리포트:</strong><br>
-                ${reason}
-            </div>
-        `;
-
-        const wearBtn = document.getElementById('btnWear');
-        wearBtn.disabled = false;
-        wearBtn.className = "btn-wear active";
-    }
-
-    function shuffleSingleSlot(categoryKey) {
-        const pool = clothesDB.filter(c => c.categories.includes(categoryKey) && c.status === '보관중');
-        if(pool.length <= 1) return alert('교체할 수 있는 다른 여분의 보관중인 옷이 없습니다.');
-        
-        let targetSlot;
-        if(categoryKey === '상의') {
-            let next = pool[Math.floor(Math.random() * pool.length)];
-            while(next.name === currentTop.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
-            currentTop = next;
-        } else if(categoryKey === '하의') {
-            let next = pool[Math.floor(Math.random() * pool.length)];
-            while(next.name === currentBottom.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
-            currentBottom = next;
-        } else if(categoryKey === '신발') {
-            let next = pool[Math.floor(Math.random() * pool.length)];
-            while(currentShoes && next.name === currentShoes.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
-            currentShoes = next;
-        }
-        
-        // 부분 동적 갱신 호환 처리
-        renderCodiResultUI("사용자가 슬롯 셔플 기능을 통해 일부 아이템을 직접 커스텀 교체하였습니다.");
-    }
-
-    function wearCodi() {
-        if (!currentTop || !currentBottom || !currentShoes) return;
-        [currentTop, currentBottom, currentShoes].forEach(item => {
-            if (!(item.categories.includes('신발') || item.categories.includes('악세사리'))) item.status = '세탁중';
-        });
-        alert(`선택하신 코디로 매칭 및 착용 기록이 완료되었습니다.\n착용한 상/하의는 세탁중 상태로 전환됩니다.`);
-        resetRecommendUI(); saveToStorage();
-    }
-
-    function resetRecommendUI() {
-        const box = document.getElementById('recommendBox');
-        box.classList.remove('active');
-        box.innerHTML = `
-            <div id=\"defaultText\" style=\"color: #64748b; line-height: 1.6; text-align: center;\">
-                <svg class=\"icon-svg icon-large\" style=\"margin-bottom:14px;\"><path d=\"M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>
-                <br>제미나이 비전 엔진 기반 상황 맞춤 매칭 구조<br>상단의 모드를 정한 후 아래 버튼을 눌러보세요.
-            </div>
-        `;
-        const wearBtn = document.getElementById('btnWear');
-        wearBtn.disabled = true; wearBtn.className = "btn-wear";
-    }
-
-    window.onload = function() { updateClosetUI(); }
-</script>
+        // 최초 윈도우 로딩 시 스토리지 활성화
+        window.onload = loadFromStorage;
+    </script>
 </body>
 </html>

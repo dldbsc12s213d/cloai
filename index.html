@@ -856,10 +856,14 @@
         `;
 
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+           const response = await fetch(url, {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json",
+        "x-goog-api-key": GEMINI_API_KEY // 🌟 구글 최신 AQ 키를 인식시키는 핵심 주머니입니다!
+    },
+    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+});
             });
             const data = await response.json();
             const responseText = data.candidates[0].content.parts[0].text.trim();

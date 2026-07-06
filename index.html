@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLO:AI - 스마트 올라운드 TPO 스타일러 (v9.5)</title>
+    <title>CLO:AI - 스마트 올라운드 TPO 스타일러 (v9.6)</title>
     <style>
         /* 🌌 미니멀 화이트 & 시안 테마 베이스 */
         *, *::before, *::after {
@@ -498,7 +498,7 @@ gap: 8px; margin-bottom: 24px;">
                 <path d="M30 18C32.5 18 34.5 15.5 33.5 12.5C32.8 10.5 30.5 9 28.5 9.5C26 10 25 12.5 25 14.5" stroke="#00b4d8" stroke-width="3" stroke-linecap="round"/>
                 <path d="M10 28L26.5 19.5C28.7 18.4 31.3 18.4 33.5 19.5L50 28" stroke="#00b4d8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             
-    <path d="M14 28H46" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+                <path d="M14 28H46" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
                 <circle cx="30" cy="20" r="3" fill="#00b4d8"/>
             </svg>
             <span style="font-size: 1.8rem;
@@ -524,8 +524,7 @@ line-height: 1.6; text-align: center;">
             </div>
         </div>
         
-      
-  <button class="btn-recommend" onclick="recommendCodi()">스마트 코디 추천받기</button>
+        <button class="btn-recommend" onclick="recommendCodi()">스마트 코디 추천받기</button>
         <button id="btnWear" class="btn-wear" onclick="wearCodi()" disabled>이 조합으로 매칭 완료</button>
     </div>
 
@@ -549,7 +548,7 @@ height:24px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polylin
             <svg class="icon-svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
      
-   <h2>새로운 아이템 등록</h2>
+        <h2>새로운 아이템 등록</h2>
         <div class="form-group">
             <label>옷/아이템 이름</label>
             <input type="text" id="clothName" placeholder="예: 무지 크루넥 티셔츠, 버뮤다 데님">
@@ -565,7 +564,7 @@ onchange="handleRegistrationCategoryChange()">
                 <option value="하의">하의</option>
                 <option value="신발">신발</option>
             
-    <option value="악세사리">악세사리</option>
+                <option value="악세사리">악세사리</option>
             </select>
         </div>
 
@@ -576,7 +575,7 @@ onchange="handleRegistrationCategoryChange()">
         
         <div class="form-group">
         
-    <label>적당한 계절</label>
+            <label>적당한 계절</label>
             <select id="clothSeason">
                 <option value="사계절">사계절 (올시즌 가능)</option>
                 <option value="봄">봄 시즌</option>
@@ -592,7 +591,7 @@ onchange="handleRegistrationCategoryChange()">
             <div class="checkbox-group">
                 <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="출근길"> 出근길</label>
           
-      <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="일상 생활"> 일상 생활</label>
+                <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="일상 생활"> 일상 생활</label>
                 <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="운동"> 운동</label>
                 <label class="checkbox-label"><input type="checkbox" name="clothOccasion" value="데이트"> 데이트</label>
             </div>
@@ -601,7 +600,7 @@ onchange="handleRegistrationCategoryChange()">
         <div class="form-group">
             <label>제품 사진 첨부</label>
   
-          <input type="file" id="clothImage" accept="image/*" style="color: #64748b;">
+            <input type="file" id="clothImage" accept="image/*" style="color: #64748b;">
         </div>
         <button class="btn-submit" onclick="addNewCloth()">옷장에 안전하게 보관</button>
     </div>
@@ -612,8 +611,7 @@ onchange="handleRegistrationCategoryChange()">
         <button class="modal-close" onclick="toggleModal('closetModal', false)">
             <svg class="icon-svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <h2>나의 스마트 
-옷장</h2>
+        <h2>나의 스마트 옷장</h2>
         
         <div class="filter-section">
             <div class="filter-header">
@@ -621,7 +619,7 @@ onchange="handleRegistrationCategoryChange()">
                 <button class="btn-mini-storage" onclick="toggleMiniStorage(event)">⚙️ 데이터 관리</button>
                 <div id="miniStoragePopover" class="mini-storage-popover">
              
-       <button class="btn-popover-action" onclick="exportClosetData()">📥 일괄 백업</button>
+                    <button class="btn-popover-action" onclick="exportClosetData()">📥 일괄 백업</button>
                     <button class="btn-popover-action" onclick="document.getElementById('importFileControl').click()">📤 일괄 복구</button>
                     <input type="file" id="importFileControl" accept=".json" onchange="importClosetData(this)" style="display:none;">
                 </div>
@@ -634,7 +632,7 @@ onchange="handleRegistrationCategoryChange()">
                 <button class="tab-btn" onclick="filterCategory('상의', this)">상의</button>
                 <button class="tab-btn" onclick="filterCategory('아우터', this)">아우터</button>
             
-    <button class="tab-btn" onclick="filterCategory('하의', this)">하의</button>
+                <button class="tab-btn" onclick="filterCategory('하의', this)">하의</button>
                 <button class="tab-btn" onclick="filterCategory('신발', this)">신발</button>
                 <button class="tab-btn" onclick="filterCategory('악세사리', this)">악세사리</button>
             </div>
@@ -642,19 +640,19 @@ onchange="handleRegistrationCategoryChange()">
             <div class="filter-row">
                 <span class="filter-label">세부:</span>
  
-               <select id="subFilter" class="filter-select" onchange="updateClosetUI()">
+                <select id="subFilter" class="filter-select" onchange="updateClosetUI()">
                     <option value="전체">모든 세부 분류</option>
                 </select>
 
                 <span class="filter-label" style="margin-left: 15px;">계절:</span>
                 <select id="seasonFilter" class="filter-select" onchange="updateClosetUI()">
      
-               <option value="전체">모든 계절</option>
+                    <option value="전체">모든 계절</option>
                     <option value="사계절">사계절 전용 제품</option>
                     <option value="봄">봄 제품</option>
                     <option value="여름">여름 제품</option>
                 
-    <option value="가을">가을 제품</option>
+                    <option value="가을">가을 제품</option>
                     <option value="겨울">겨울 제품</option>
                 </select>
             </div>
@@ -669,7 +667,7 @@ align-items: center; gap: 6px; color: #475569; font-weight: 600; font-size:0.82r
             <div class="batch-btn-group">
                 <button class="btn-batch-towash" onclick="batchMoveToWash()">🧺 세탁함 전송</button>
          
-       <button class="btn-batch-wash" onclick="batchWashComplete()">☀️ 세탁완료 회수</button>
+                <button class="btn-batch-wash" onclick="batchWashComplete()">☀️ 세탁완료 회수</button>
                 <button class="btn-batch-del" onclick="batchDelete()">🗑️ 영구 삭제</button>
             </div>
         </div>
@@ -679,16 +677,16 @@ align-items: center; gap: 6px; color: #475569; font-weight: 600; font-size:0.82r
 </div>
 
 <script>
-    // 🔑 확보하신 제미나이 API Key를 아래 따옴표 안에 넣어주세요!
+    // 🔑 확보하신 제미나이 API Key가 여기에 정확히 주입되어 있습니다.
     const GEMINI_API_KEY = "AQ.Ab8RN6JuOFEI2AnwRckIECoQVBc0btTfJYQHAXLeLYmwMXxbTA";
 
     let defaultClothes = [
-        
-{name: "기본 크루넥 맨투맨", categories: ["상의"], subcategory: "맨투맨/스웨트", season: "사계절", occasions: ["일상 생활", "데이트"], status: "보관중", img: ""},
+        {name: "기본 크루넥 맨투맨", categories: ["상의"], subcategory: "맨투맨/스웨트", season: "사계절", occasions: ["일상 생활", "데이트"], status: "보관중", img: ""},
         {name: "클래식 흑청 데님", categories: ["하의"], subcategory: "청바지", season: "사계절", occasions: ["출근길", "일상 생활", "데이트"], status: "보관중", img: ""},
         {name: "화이트 데일리 스니커즈", categories: ["신발"], subcategory: "스니커즈/운동화", season: "사계절", occasions: ["출근길", "일상 생활", "운동", "데이트"], status: "보관중", img: ""}
     ];
-let rawData = JSON.parse(localStorage.getItem('clothesDB_v9')) || defaultClothes;
+
+    let rawData = JSON.parse(localStorage.getItem('clothesDB_v9')) || defaultClothes;
     let clothesDB = rawData.map(item => {
         if (item.category && !item.categories) { item.categories = [item.category]; delete item.category; }
         if (item.categories && item.categories.includes('겉옷')) item.categories = item.categories.map(c => c === '겉옷' ? '아우터' : c);
@@ -696,14 +694,16 @@ let rawData = JSON.parse(localStorage.getItem('clothesDB_v9')) || defaultClothes
         if (!item.occasions) item.occasions = ["출근길", "일상 생활"];
         return item;
     });
-const subcategoryMap = {
+
+    const subcategoryMap = {
         "상의": ["티셔츠/민소매", "맨투맨/스웨트", "셔츠/블라우스", "후드티셔츠", "니트/스웨터", "가디건"],
         "아우터": ["후드집업", "블루종", "라이더 자켓", "슈트", "블레이저 자켓", "패딩", "아노락", "플리스", "코트", "바람막이/자켓"],
         "하의": ["청바지", "슬랙스/와이드팬츠", "트레이닝 팬츠", "조거 팬츠", "반바지/버뮤다"],
         "신발": ["스니커즈/운동화", "구두", "부츠", "슬리퍼/샌들"],
         "악세사리": ["모자", "가방", "벨트", "기타 악세사리"]
     };
-const autoOccasionMap = {
+
+    const autoOccasionMap = {
         "티셔츠/민소매": ["일상 생활", "운동"],
         "맨투맨/스웨트": ["일상 생활"],
         "셔츠/블라우스": ["출근길", "데이트"],
@@ -712,220 +712,211 @@ const autoOccasionMap = {
         "라이더 자켓": ["데이트", "일상 생활"],
         "블레이저 자켓": ["출근길", "데이트"],
         "청바지": ["일상 생활", "데이트"],
-        "슬랙스/와이드팬츠": 
-["출근길", "일상 생활", "데이트"],
+        "슬랙스/와이드팬츠": ["출근길", "일상 생활", "데이트"],
         "트레이닝 팬츠": ["운동", "일상 생활"],
         "스니커즈/운동화": ["출근길", "일상 생활", "운동", "데이트"],
         "구두": ["출근길", "데이트"],
         "부츠": ["데이트"]
     };
-let currentTop = null;
+
+    let currentTop = null;
     let currentBottom = null;
     let currentShoes = null;
     let selectedCategory = "전체";
     let currentOccasion = "출근길";
-function saveToStorage() { localStorage.setItem('clothesDB_v9', JSON.stringify(clothesDB)); }
+
+    function saveToStorage() { localStorage.setItem('clothesDB_v9', JSON.stringify(clothesDB)); }
     
     function toggleMiniStorage(e) { 
         e.stopPropagation();
-const pop = document.getElementById('miniStoragePopover'); 
+        const pop = document.getElementById('miniStoragePopover'); 
         pop.style.display = pop.style.display === 'flex' ? 'none' : 'flex';
-}
+    }
     
     document.addEventListener('click', () => { document.getElementById('miniStoragePopover').style.display = 'none'; });
-function changeOccasion(mode, btn) { 
+    
+    function changeOccasion(mode, btn) { 
         currentOccasion = mode; 
         document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('active')); 
         btn.classList.add('active'); 
         resetRecommendUI();
-}
+    }
 
     /* 📱 스마트 기기간 클립보드 전송 시스템 */
     function exportToMobile() {
         if(clothesDB.length === 0) return alert('내보낼 옷장 데이터가 비어있습니다.');
-const dataStr = JSON.stringify(clothesDB);
+        const dataStr = JSON.stringify(clothesDB);
         navigator.clipboard.writeText(dataStr).then(() => {
             alert("👗 옷장 데이터가 메모리에 복사되었습니다!\n카톡이나 메시지로 나에게 전송한 후, 핸드폰에서 [폰에서 데이터 동기화 받기] 버튼을 누르고 붙여넣으세요.");
         }).catch(err => {
             alert("자동 복사에 실패했습니다. 수동으로 복사해주세요:\n" + dataStr);
         });
-}
+    }
 
     function importFromComputer() {
         const inputData = prompt("컴퓨터에서 전달받아 복사한 옷장 데이터를 그대로 붙여넣어 주세요:");
-if (inputData) {
+        if (inputData) {
             try {
                 const parsed = JSON.parse(inputData);
-if (Array.isArray(parsed)) {
+                if (Array.isArray(parsed)) {
                     clothesDB = parsed;
-saveToStorage();
+                    saveToStorage();
                     updateSubFilterOptions(selectedCategory);
                     updateClosetUI();
                     alert("🔄 기기 동기화 성공! 이제 스마트폰에서도 컴퓨터와 동일한 옷장이 열립니다.");
-                } else { alert("올바른 데이터 형식이 아닙니다.");
-}
-            } catch (e) { alert("데이터 해독에 실패했습니다. 복사한 내용 전체를 정확히 입력했는지 확인해주세요.");
-}
+                } else { alert("올바른 데이터 형식이 아닙니다."); }
+            } catch (e) { alert("데이터 해독에 실패했습니다. 복사한 내용 전체를 정확히 입력했는지 확인해주세요."); }
         }
     }
 
     function exportClosetData() {
         if(clothesDB.length === 0) return alert('백업할 옷 데이터가 없습니다.');
-const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clothesDB));
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clothesDB));
         const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "cloai_tpo_backup.json");
         document.body.appendChild(dl); dl.click(); dl.remove(); alert('백업 성공!');
-}
+    }
 
     function importClosetData(inputElement) {
         const file = inputElement.files[0]; if(!file) return;
-const reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function(e) {
             try {
                 let importedData = JSON.parse(e.target.result);
-if(Array.isArray(importedData)) {
+                if(Array.isArray(importedData)) {
                     if(confirm(`[총 ${importedData.length}개]의 데이터를 복구할까요?`)) {
                         clothesDB = importedData;
-saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); alert('복구 완료!');
+                        saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); alert('복구 완료!');
                     }
                 }
-            } catch (err) { alert('파일이 올바르지 않습니다.');
-}
+            } catch (err) { alert('파일이 올바르지 않습니다.'); }
             inputElement.value = "";
         };
         reader.readAsText(file);
-}
+    }
 
     function toggleModal(modalId, show) {
         const modal = document.getElementById(modalId);
-modal.style.display = show ? 'flex' : 'none';
-        if (show && modalId === 'closetModal') { updateSubFilterOptions(selectedCategory); updateClosetUI();
-}
+        modal.style.display = show ? 'flex' : 'none';
+        if (show && modalId === 'closetModal') { updateSubFilterOptions(selectedCategory); updateClosetUI(); }
         if (!show && modalId === 'registerModal') {
             document.getElementById('clothCategory').value = "";
-document.getElementById('subCategoryFormGroup').style.display = 'none';
+            document.getElementById('subCategoryFormGroup').style.display = 'none';
             document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => cb.checked = false);
         }
     }
 
-    function handleOverlayClick(e, modalId) { if(e.target.classList.contains('modal-overlay')) toggleModal(modalId, false);
-}
+    function handleOverlayClick(e, modalId) { if(e.target.classList.contains('modal-overlay')) toggleModal(modalId, false); }
 
     function handleRegistrationCategoryChange() {
         const categorySelect = document.getElementById('clothCategory');
-const subGroup = document.getElementById('subCategoryFormGroup');
+        const subGroup = document.getElementById('subCategoryFormGroup');
         const subSelect = document.getElementById('clothSubcategory'); const selected = categorySelect.value;
-        if (!selected) { subGroup.style.display = 'none'; return;
-}
+        if (!selected) { subGroup.style.display = 'none'; return; }
         subSelect.innerHTML = ''; const options = subcategoryMap[selected] || [];
-options.forEach(optText => { const opt = document.createElement('option'); opt.value = optText; opt.textContent = optText; subSelect.appendChild(opt); });
+        options.forEach(optText => { const opt = document.createElement('option'); opt.value = optText; opt.textContent = optText; subSelect.appendChild(opt); });
         subGroup.style.display = 'flex'; handleRegistrationSubcategoryChange();
-}
+    }
 
     function handleRegistrationSubcategoryChange() {
         const subSelect = document.getElementById('clothSubcategory');
-const selectedSub = subSelect.value;
+        const selectedSub = subSelect.value;
         const defaultOccasions = autoOccasionMap[selectedSub] || ["일상 생활"];
         document.querySelectorAll('input[name="clothOccasion"]').forEach(cb => { cb.checked = defaultOccasions.includes(cb.value); });
-}
+    }
 
     function addNewCloth() {
         const nameInput = document.getElementById('clothName');
-const categorySelect = document.getElementById('clothCategory');
+        const categorySelect = document.getElementById('clothCategory');
         const subSelect = document.getElementById('clothSubcategory'); const seasonInput = document.getElementById('clothSeason');
         const fileInput = document.getElementById('clothImage');
-const checkedOccasions = Array.from(document.querySelectorAll('input[name="clothOccasion"]:checked')).map(cb => cb.value);
+        const checkedOccasions = Array.from(document.querySelectorAll('input[name="clothOccasion"]:checked')).map(cb => cb.value);
         if (!nameInput.value.trim()) return alert('이름을 입력해 주세요!');
         if (!categorySelect.value) return alert('대분류 카테고리를 지정해 주세요!');
-if (checkedOccasions.length === 0) return alert('착용 상황(TPO) 태그를 하나 이상 선택해 주세요!');
+        if (checkedOccasions.length === 0) return alert('착용 상황(TPO) 태그를 하나 이상 선택해 주세요!');
         const file = fileInput.files[0];
-const completeAction = (imgData) => {
-            const newCloth = { name: nameInput.value, categories: [categorySelect.value], subcategory: subSelect.value ||
-"일반", season: seasonInput.value, occasions: checkedOccasions, status: "보관중", img: imgData };
+        const completeAction = (imgData) => {
+            const newCloth = { name: nameInput.value, categories: [categorySelect.value], subcategory: subSelect.value || "일반", season: seasonInput.value, occasions: checkedOccasions, status: "보관중", img: imgData };
             clothesDB.push(newCloth); saveToStorage(); nameInput.value = ""; fileInput.value = "";
-categorySelect.value = ""; document.getElementById('subCategoryFormGroup').style.display = 'none';
+            categorySelect.value = ""; document.getElementById('subCategoryFormGroup').style.display = 'none';
             alert(`'${newCloth.name}' 옷장에 안전하게 등록 완료!`); toggleModal('registerModal', false);
         };
-if (file) { const reader = new FileReader(); reader.onload = (e) => completeAction(e.target.result); reader.readAsDataURL(file); } else { completeAction("");
-}
+        if (file) { const reader = new FileReader(); reader.onload = (e) => completeAction(e.target.result); reader.readAsDataURL(file); } else { completeAction(""); }
     }
 
     function updateSubFilterOptions(category) {
         const subFilter = document.getElementById('subFilter');
-subFilter.innerHTML = '<option value="전체">모든 세부 분류</option>';
+        subFilter.innerHTML = '<option value="전체">모든 세부 분류</option>';
         let subs = []; if (category === "전체") { Object.values(subcategoryMap).forEach(arr => subs.push(...arr));
-} else { subs = subcategoryMap[category] || []; }
+        } else { subs = subcategoryMap[category] || []; }
         subs.forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subFilter.appendChild(opt); });
-}
+    }
 
     function filterCategory(category, btnElement) {
         selectedCategory = category;
-const tabs = document.querySelectorAll('.tab-btn'); tabs.forEach(t => t.classList.remove('active'));
+        const tabs = document.querySelectorAll('.tab-btn'); tabs.forEach(t => t.classList.remove('active'));
         btnElement.classList.add('active'); updateSubFilterOptions(category); updateClosetUI();
-}
+    }
 
-    function toggleSelectAll(masterCheckbox) { const itemCheckboxes = document.querySelectorAll('.select-checkbox'); itemCheckboxes.forEach(cb => cb.checked = masterCheckbox.checked);
-}
+    function toggleSelectAll(masterCheckbox) { const itemCheckboxes = document.querySelectorAll('.select-checkbox'); itemCheckboxes.forEach(cb => cb.checked = masterCheckbox.checked); }
 
     function updateClosetUI() {
         const gridEl = document.getElementById('closetGrid');
-gridEl.innerHTML = '';
+        gridEl.innerHTML = '';
         const selectedSub = document.getElementById('subFilter').value; const selectedSeason = document.getElementById('seasonFilter').value;
         document.getElementById('selectAllCheckbox').checked = false;
-const filteredDB = clothesDB.map((item, originalIndex) => ({...item, originalIndex}))
+        const filteredDB = clothesDB.map((item, originalIndex) => ({...item, originalIndex}))
             .filter(item => {
                 const matchCat = (selectedCategory === "전체" || item.categories.includes(selectedCategory));
                 const matchSub = (selectedSub === "전체" || item.subcategory === selectedSub);
                 let matchSea = (selectedSeason === "전체" || selectedSeason === "사계절" ? (selectedSeason === "전체" || 
-item.season === "사계절") : (item.season === selectedSeason || item.season === "사계절"));
+                item.season === "사계절") : (item.season === selectedSeason || item.season === "사계절"));
                 return matchCat && matchSub && matchSea;
             });
-if(filteredDB.length === 0) { gridEl.innerHTML = "<p style='color:#94a3b8; text-align:center; grid-column:1/-1; padding:40px 0;'>해당 조건의 아이템이 존재하지 않습니다.</p>"; return;
-}
+        if(filteredDB.length === 0) { gridEl.innerHTML = "<p style='color:#94a3b8; text-align:center; grid-column:1/-1; padding:40px 0;'>해당 조건의 아이템이 존재하지 않습니다.</p>"; return; }
         filteredDB.forEach(item => {
             const li = document.createElement('li'); li.className = 'closet-card';
             const imgTag = item.img ? `<img src="${item.img}" class="cloth-img">` : `<div class="cloth-img no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
             li.innerHTML = `
-                <input type="checkbox" class="select-checkbox" 
-data-index="${item.originalIndex}">
+                <input type="checkbox" class="select-checkbox" data-index="${item.originalIndex}">
                 ${imgTag}
                 <div class="cloth-name">${item.name}</div>
                 <div class="cloth-subtext">${item.subcategory} (${item.season})</div>
                 <div class="tag-container">
                     <span class="cloth-tag ${item.status === '보관중' ? 'status-keep' : 'status-wash'}">${item.status}</span>
-    
-                <span class="cloth-tag tag-category-badge">${item.categories[0]}</span>
+                    <span class="cloth-tag tag-category-badge">${item.categories[0]}</span>
                     ${item.occasions.map(o => `<span class="cloth-tag tag-occasion-badge">${o}</span>`).join('')}
                 </div>
             `;
-gridEl.appendChild(li);
+            gridEl.appendChild(li);
         });
     }
 
-    function getSelectedOriginalIndices() { return Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => parseInt(cb.getAttribute('data-index')));
-}
+    function getSelectedOriginalIndices() { return Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => parseInt(cb.getAttribute('data-index'))); }
     function batchMoveToWash() { const idxs = getSelectedOriginalIndices(); if(idxs.length === 0) return alert('선택된 아이템이 없습니다.');
-idxs.forEach(i => clothesDB[i].status = "세탁중"); saveToStorage(); updateClosetUI(); }
+        idxs.forEach(i => clothesDB[i].status = "세탁중"); saveToStorage(); updateClosetUI(); }
     function batchWashComplete() { const idxs = getSelectedOriginalIndices();
-if(idxs.length === 0) return alert('선택된 아이템이 없습니다.'); idxs.forEach(i => clothesDB[i].status = "보관중"); saveToStorage(); updateClosetUI();
-}
+        if(idxs.length === 0) return alert('선택된 아이템이 없습니다.'); idxs.forEach(i => clothesDB[i].status = "보관중"); saveToStorage(); updateClosetUI(); }
     function batchDelete() { const idxs = getSelectedOriginalIndices(); if(idxs.length === 0) return alert('선택된 아이템이 없습니다.');
-if(confirm('선택한 아이템을 옷장에서 완전히 제거할까요?')) { clothesDB = clothesDB.filter((_, i) => !idxs.includes(i)); saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI();
-} }
+        if(confirm('선택한 아이템을 옷장에서 완전히 제거할까요?')) { clothesDB = clothesDB.filter((_, i) => !idxs.includes(i)); saveToStorage(); updateSubFilterOptions(selectedCategory); updateClosetUI(); } 
+    }
 
     /* 🧠 [진짜 제미나이 AI 연동 코어 엔진] */
     async function askGeminiCodi(occasion) {
         if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("여기에")) {
-            alert("제미나이 API Key가 올바르게 입력되지 않았습니다!\n스크립트 451번째 줄에 키를 넣어주세요.");
-return null;
+            alert("제미나이 API Key가 올바르게 입력되지 않았습니다!\n코드 상단 스크립트의 API_KEY 변수를 확인해 주세요.");
+            return null;
         }
 
-        const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-// 현재 보관중(세탁중이 아닌)인 옷 목록만 필터링해서 제미나이 컨텍스트로 주입
+        // 🌟 구글 제미나이 2.5 최신 규격 모델(gemini-2.5-flash) 엔드포인트 주소로 완벽 업데이트
+        const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+        
+        // 현재 보관중(세탁중이 아닌)인 옷 목록만 필터링해서 제미나이 컨텍스트로 주입
         const availableClothes = clothesDB.filter(c => c.status === "보관중");
-const closetContext = availableClothes.map(c => `[카테고리: ${c.categories.join(',')}] 명칭: ${c.name} (세부: ${c.subcategory}, 계절태그: ${c.season})`).join('\n');
-const promptText = `
+        const closetContext = availableClothes.map(c => `[카테고리: ${c.categories.join(',')}] 명칭: ${c.name} (세부: ${c.subcategory}, 계절태그: ${c.season})`).join('\n');
+        
+        const promptText = `
         당신은 패션 인공지능 스타일러 'CLO:AI'입니다.
-현재 내 옷장에서 활용 가능한 보관중인 옷 목록:
+        현재 내 옷장에서 활용 가능한 보관중인 옷 목록:
         ${closetContext}
 
         조건:
@@ -933,16 +924,18 @@ const promptText = `
 
         미션:
         제공된 옷 목록 중에서 현재 입을 수 있는 상의(Top), 하의(Bottom), 신발(Shoes)을 각각 1개씩 엄선하여 완벽한 TPO 조합을 만들어주세요.
-* 반드시 목록에 존재하는 정확한 명칭('명칭:' 뒤에 적힌 텍스트)만 사용해야 하며, 절대 없는 아이템을 마음대로 지어내면 안 됩니다.
-답변은 부가 설명 없이 반드시 아래 규칙의 JSON 텍스트로만 출력하세요. 마크다운 기호도 쓰지 마세요.
-{
+        * 반드시 목록에 존재하는 정확한 명칭('명칭:' 뒤에 적힌 텍스트)만 사용해야 하며, 절대 없는 아이템을 마음대로 지어내면 안 됩니다.
+        답변은 부가 설명 없이 반드시 아래 규칙의 JSON 텍스트로만 출력하세요. 마크다운 기호도 쓰지 마세요.
+        {
           "top": "선택한 상의의 정확한 명칭",
           "bottom": "선택한 하의의 정확한 명칭",
           "shoes": "선택한 신발의 정확한 명칭",
           "reason": "이 TPO 상황에 맞춰 이 코디 조합을 추천하는 세련되고 타당한 패션 스타일링 이유 설명"
         }
         `;
-try {
+
+        try {
+            // 🌟 x-goog-api-key 헤더 전송 방식을 이용한 보안 무력화 해결 및 구글 신규 규격 통신 적용
             const response = await fetch(url, {
                 method: "POST",
                 headers: { 
@@ -951,51 +944,58 @@ try {
                 },
                 body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
             });
-const data = await response.json();
+            
+            const data = await response.json();
+            
+            // 응답값에 대한 예외 예방 조치 추가
+            if (!data.candidates || data.candidates.length === 0) {
+                console.error("Gemini Response Error Raw:", data);
+                throw new Error(data.error ? data.error.message : "응답 데이터 구조 비정상");
+            }
+            
             const responseText = data.candidates[0].content.parts[0].text.trim();
             const cleanJson = responseText.replace(/```json|```/g, "").trim();
             return JSON.parse(cleanJson);
-} catch (error) {
-    console.error("Gemini Engine Error:", error);
-    
-    // 에러 메시지를 조금 더 상세하게 가공하여 팝업으로 안내
-    let errorMsg = "엔진 통신 중 에러가 발생했습니다.\n\n[원인 파악 요령]\n";
-    errorMsg += `- 에러 내용: ${error.message}\n`;
-    errorMsg += "- 브라우저 화면에서 F12 키를 눌러 'Console' 탭을 보시면 더 자세한 로그를 볼 수 있습니다.";
-    
-    alert(errorMsg);
-    return null;
-}
+        } catch (error) {
+            console.error("Gemini Engine Error:", error);
+            
+            // 🛠️ 진짜 에러 내용을 진단할 수 있는 디버깅 알림창 탑재
+            let errorMsg = "엔진 통신 중 에러가 발생했습니다.\n\n[원인 파악 요령]\n";
+            errorMsg += `- 에러 내용: ${error.message}\n`;
+            errorMsg += "- 키보드 F12 키를 눌러 'Console' 탭을 보시면 상세 로그를 확인할 수 있습니다.";
+            alert(errorMsg);
+            return null;
+        }
     }
 
     /* 🕹️ 추천 제어 함수 */
     async function recommendCodi() {
         const box = document.getElementById('recommendBox');
-box.classList.add('active');
+        box.classList.add('active');
         
         // 로딩 화면 전환
         box.innerHTML = `
             <div style="text-align:center; padding:30px; color:#64748b;">
                 <div style="margin: 0 auto 15px; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #00b4d8; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                 <p style="font-weight:700; color:#0f172a; margin-bottom:5px;">🤖 제미나이 AI가 옷장을 정밀 분석 중...</p>
-         
-               <p style="font-size:12px; color:#94a3b8;">선택하신 [${currentOccasion}] 상황에 최적화된 조합을 매칭하고 있습니다.</p>
+                <p style="font-size:12px; color:#94a3b8;">선택하신 [${currentOccasion}] 상황에 최적화된 조합을 매칭하고 있습니다.</p>
             </div>
         `;
-// 진짜 구글 제미나이 API 호출
+
+        // 진짜 구글 제미나이 API 호출
         const result = await askGeminiCodi(currentOccasion);
-if (!result) {
+        if (!result) {
             resetRecommendUI();
             return;
-}
+        }
 
         // 제미나이가 추천해 준 옷의 문자열 명칭을 기반으로 데이터베이스 객체 매칭
         currentTop = clothesDB.find(c => c.name === result.top && c.status === '보관중') ||
-clothesDB.find(c => c.categories.includes('상의') && c.status === '보관중');
+                     clothesDB.find(c => c.categories.includes('상의') && c.status === '보관중');
         currentBottom = clothesDB.find(c => c.name === result.bottom && c.status === '보관중') ||
-clothesDB.find(c => c.categories.includes('하의') && c.status === '보관중');
+                        clothesDB.find(c => c.categories.includes('하의') && c.status === '보관중');
         currentShoes = clothesDB.find(c => c.name === result.shoes && c.status === '보관중') ||
-clothesDB.find(c => c.categories.includes('신발') && c.status === '보관중');
+                       clothesDB.find(c => c.categories.includes('신발') && c.status === '보관중');
 
         if (!currentTop || !currentBottom) {
             box.innerHTML = `
@@ -1004,108 +1004,99 @@ clothesDB.find(c => c.categories.includes('신발') && c.status === '보관중')
                     <span style="font-size:13px; color:#64748b; font-weight:normal;">현재 세탁함에 있지 않고 입을 수 있는 '상의'와 '하의'가 
 부족합니다. 옷을 추가 등록하거나 세탁을 완료해 주세요!</span>
                 </div>`;
-return;
+            return;
         }
 
         // 대형 비주얼 카드 컴포넌트로 렌더링
         renderCodiResultUI(result.reason);
-}
+    }
 
     function renderCodiResultUI(reason) {
         const box = document.getElementById('recommendBox');
-const topImg = currentTop.img ? `<img src="${currentTop.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-const bottomImg = currentBottom.img ? `<img src="${currentBottom.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-const shoesImg = (currentShoes && currentShoes.img) ? `<img src="${currentShoes.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
-box.innerHTML = `
+        const topImg = currentTop.img ? `<img src="${currentTop.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
+        const bottomImg = currentBottom.img ? `<img src="${currentBottom.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
+        const shoesImg = (currentShoes && currentShoes.img) ? `<img src="${currentShoes.img}" class="coordination-slot">` : `<div class="coordination-slot no-img"><svg class="icon-svg icon-large"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
+        box.innerHTML = `
             <div class="coordination-view">
                 <div class="slot-container" onclick="shuffleSingleSlot('상의')">
                     ${topImg}
                     <div class="reroll-overlay">🔄 다른 상의 보기</div>
                     <div class="slot-info">
-  
                       <div class="slot-type">TOP</div>
                         <div class="slot-label">${currentTop.name}</div>
                     </div>
                 </div>
                 
-<div class="slot-container" onclick="shuffleSingleSlot('하의')">
+                <div class="slot-container" onclick="shuffleSingleSlot('하의')">
                     ${bottomImg}
                     <div class="reroll-overlay">🔄 다른 하의 보기</div>
                     <div class="slot-info">
                         <div class="slot-type">BOTTOM</div>
-        
-                <div class="slot-label">${currentBottom.name}</div>
+                        <div class="slot-label">${currentBottom.name}</div>
                     </div>
                 </div>
                 <div class="slot-container" onclick="shuffleSingleSlot('신발')">
                     ${shoesImg}
-         
-           <div class="reroll-overlay">🔄 다른 신발 보기</div>
+                    <div class="reroll-overlay">🔄 다른 신발 보기</div>
                     <div class="slot-info">
                         <div class="slot-type">SHOES</div>
-                        <div class="slot-label">${currentShoes ?
-currentShoes.name : '기본 신발'}</div>
+                        <div class="slot-label">${currentShoes ? currentShoes.name : '기본 신발'}</div>
                     </div>
                 </div>
             </div>
             <div style="width:100%; text-align:left; background:#ffffff; border:1px solid #e2e8f0; padding:16px; border-radius:14px; font-size:0.85rem; line-height:1.6; color:#334155; margin-top:10px; border-left:4px solid #00b4d8;">
-                <strong style="color:#0f172a;">🤖 제미나이 AI 스타일 분석 
-리포트:</strong><br>
+                <strong style="color:#0f172a;">🤖 제미나이 AI 스타일 분석 리포트:</strong><br>
                 ${reason}
             </div>
         `;
-const wearBtn = document.getElementById('btnWear');
+        const wearBtn = document.getElementById('btnWear');
         wearBtn.disabled = false;
         wearBtn.className = "btn-wear active";
-}
+    }
 
     function shuffleSingleSlot(categoryKey) {
         const pool = clothesDB.filter(c => c.categories.includes(categoryKey) && c.status === '보관중');
-if(pool.length <= 1) return alert('교체할 수 있는 다른 여분의 보관중인 옷이 없습니다.');
+        if(pool.length <= 1) return alert('교체할 수 있는 다른 여분의 보관중인 옷이 없습니다.');
         
-        let targetSlot;
-if(categoryKey === '상의') {
+        if(categoryKey === '상의') {
             let next = pool[Math.floor(Math.random() * pool.length)];
-while(next.name === currentTop.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)];
-}
+            while(next.name === currentTop.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
             currentTop = next;
-} else if(categoryKey === '하의') {
+        } else if(categoryKey === '하의') {
             let next = pool[Math.floor(Math.random() * pool.length)];
-while(next.name === currentBottom.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)];
-}
+            while(next.name === currentBottom.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
             currentBottom = next;
-} else if(categoryKey === '신발') {
+        } else if(categoryKey === '신발') {
             let next = pool[Math.floor(Math.random() * pool.length)];
-while(currentShoes && next.name === currentShoes.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)];
-}
+            while(currentShoes && next.name === currentShoes.name && pool.length > 1) { next = pool[Math.floor(Math.random() * pool.length)]; }
             currentShoes = next;
-}
+        }
         
         // 부분 동적 갱신 호환 처리
         renderCodiResultUI("사용자가 슬롯 셔플 기능을 통해 일부 아이템을 직접 커스텀 교체하였습니다.");
-}
+    }
 
     function wearCodi() {
         if (!currentTop || !currentBottom || !currentShoes) return;
-[currentTop, currentBottom, currentShoes].forEach(item => {
+        [currentTop, currentBottom, currentShoes].forEach(item => {
             if (!(item.categories.includes('신발') || item.categories.includes('악세사리'))) item.status = '세탁중';
         });
-alert(`선택하신 코디로 매칭 및 착용 기록이 완료되었습니다.\n착용한 상/하의는 세탁중 상태로 전환됩니다.`);
+        alert(`선택하신 코디로 매칭 및 착용 기록이 완료되었습니다.\n착용한 상/하의는 세탁중 상태로 전환됩니다.`);
         resetRecommendUI(); saveToStorage();
-}
+    }
 
     function resetRecommendUI() {
         const box = document.getElementById('recommendBox');
         box.classList.remove('active');
-box.innerHTML = `
-            <div id=\"defaultText\" style=\"color: #64748b; line-height: 1.6; text-align: center;\">
-                <svg class=\"icon-svg icon-large\" style=\"margin-bottom:14px;\"><path d=\"M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>
+        box.innerHTML = `
+            <div id="defaultText" style="color: #64748b; line-height: 1.6; text-align: center;">
+                <svg class="icon-svg icon-large" style="margin-bottom:14px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 <br>제미나이 비전 엔진 기반 상황 맞춤 매칭 구조<br>상단의 모드를 정한 후 아래 버튼을 눌러보세요.
-</div>
+            </div>
         `;
         const wearBtn = document.getElementById('btnWear');
         wearBtn.disabled = true; wearBtn.className = "btn-wear";
-}
+    }
 
     window.onload = function() { updateClosetUI(); }
 </script>
